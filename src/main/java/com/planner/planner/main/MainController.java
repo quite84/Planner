@@ -12,11 +12,12 @@ public class MainController {
 
 	@GetMapping("/main")
 	public String getMain(Model model) {
-		log.info("진입 확인 :::!!!");
+		
 		
 		model.addAttribute("message", "안녕하세요, Thymeleaf!");
         model.addAttribute("user", "홍길동");
-		return "main";
+        model.addAttribute("new", "권오태");
+        return "main";
 	}
 }
 
