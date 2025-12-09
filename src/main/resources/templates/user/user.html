@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<!-- css/jquery 적용 코드 -->
+<div th:insert="~{js/jQuery :: jquery}" />
+<div th:replace="~{css/Bootstrap :: bootstrap}" />
+<head>
+<meta charset="UTF-8">
+<title>User Data Page</title>
+</head>
+<body>
+	<div layout:fragment="content">
+
+		<!-- layout.html 적용 코드 타 html에서 insert 할때 참고 -->
+		<th:insert th:replace="~{layout}" />
+
+		<div class="container mt-5 table-width-60">
+			<h2>사용자 목록</h2>
+			<table class="table table-striped table-hover">
+				<thead class="table-dark">
+					<tr>
+						<th>#</th>
+						<th>이름</th>
+						<th>이메일</th>
+						<th>전화번호</th>
+						<th>권한</th>
+						<th>등록일</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="user, stat : ${List}">
+						<td th:text="${stat.count}">1</td>
+						<td th:text="${user.userName}">홍길동</td>
+						<td th:text="${user.userEmail}">user01@email.com</td>
+						<td th:text="${user.userPhone}">010-1234-0001</td>
+						<td th:text="${user.role}">admin</td>
+						<td	th:text="${user.insertDate}">2024-06-01</td>
+					</tr>
+
+
+
+					<!-- <tr>
+					<td>1</td>
+					<td>홍길동</td>
+					<td>user01@email.com</td>
+					<td>010-1234-0001</td>
+					<td>admin</td>
+					<td>2024-06-01</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>김철수</td>
+					<td>user02@email.com</td>
+					<td>010-1234-0002</td>
+					<td>user</td>
+					<td>2024-06-02</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>이영희</td>
+					<td>user03@email.com</td>
+					<td>010-1234-0003</td>
+					<td>user</td>
+					<td>2024-06-03</td>
+				</tr> -->
+					<!-- 필요에 따라 행(row) 추가 가능 -->
+				</tbody>
+			</table>
+
+		</div>
+	</div>
+</body>
+</html>

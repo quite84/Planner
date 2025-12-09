@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<!-- css/jquery 적용 코드 -->
+<div th:insert="~{js/jQuery :: jquery}" />
+<div th:replace="~{css/Bootstrap :: bootstrap}" />
+
+<th:block layout:fragment="css">
+	<!-- 필요시 추가 css 가능 -->
+</th:block>
+<div layout:fragment="content">
+
+	<!-- layout.html 적용 코드 타 html에서 insert 할때 참고 -->
+	<th:insert th:replace="~{layout}" />
+
+
+	<div class="alert alert-success" role="alert">Bootstrap이 성공적으로 적용되었습니다!</div>
+	<h1 class="mb-4">Bootstrap 예제 버튼</h1>
+	<button type="button" id="a1" class="btn btn-primary">Primary Button</button>
+	<button type="button" class="btn btn-success">Success Button</button>
+	<button type="button" class="btn btn-danger">Danger Button</button>
+	<hr>
+	<p>아래는 Bootstrap의 카드 컴포넌트 예시입니다.</p>
+
+	<!-- controller에서 타임립프로 데이터 노출을 위한 방법 -->
+	<p th:text="${message}" />
+	<p th:text="${user}" />
+
+	<div class="card" style="width: 18rem;">
+		<div class="card-body">
+			<h5 class="card-title">카드 제목</h5>
+			<p class="card-text">이 텍스트가 Bootstrap 카드 컴포넌트에 의해 꾸며집니다.</p>
+			<a href="#" class="btn btn-secondary">카드 버튼</a>
+		</div>
+	</div>
+</div>
+<script>
+	$(document).ready(function() {
+		$("#a1").click(function() {
+			alert("Primary Button이 클릭되었습니다!");
+			console.log("확인!!");
+		});
+	});
+</script>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Bootstrap Test</title>
+    
+</head>
+<body>
+    <!-- 공통 네비게이션 바 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" id= "aa1" href="#">MyApp</a>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+        <th:block layout:fragment="content"></th:block>
+    </div>
+</body>
+
+<script>
+$(document).ready(function(){
+	$("#aa1").click(function(){
+		alert("MyApp 클릭 이벤트 입니다.")
+	});
+})
+
+</script>
+</html>
