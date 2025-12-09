@@ -10,7 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 public class RootController {
 	
 	@GetMapping("/")
-	public String Root() {
+	public String root() {
+		log.info("start Root");
 		return "redirect:/main";
 	};
 
