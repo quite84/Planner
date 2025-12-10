@@ -8,21 +8,16 @@
 	<div class="container mt-4">
 		<div layout:fragment="content">
 
-
 			<!-- layout.html 적용 코드 타 html에서 insert 할때 참고 -->
 			<th:insert th:replace="~{layout}" />
-
-			<div class="alert alert-success mt-3 d-none" role="alert"
-				id="successAlert">
-				Bootstrap이 성공적으로 적용되었습니다!
-				<button type="button" class="btn-close" data-bs-dismiss="alert"
-					aria-label="Close"></button>
-			</div>
+			<!-- 우측 상단 고정 Toast 컨테이너 (id 부여) -->
+			<div id="toastContainer"
+				class="toast-container position-fixed top-0 end-0 p-3"></div>
 
 			<h1 class="mb-4">Bootstrap 예제 버튼</h1>
 			<button type="button" id="a1" class="btn btn-primary">Primary
 				Button</button>
-			<button type="button" class="btn btn-success" id="showAlertBtn">Success
+			<button type="button" class="btn btn-success" id="showToastBtn">Success
 				Button</button>
 			<button type="button" class="btn btn-danger">Danger Button</button>
 			<hr>
@@ -77,11 +72,45 @@
 			alert("Primary Button이 클릭되었습니다!");
 			window.location.href = "/user";
 		});
-		$('#showAlertBtn').click(function() {
+		
+		/* $('#showAlertBtn').click(function() {
+			if($('#showAlertBtn').hasClass("d-none")){
+				alert('aa');
+			}
+			
 			$('#successAlert').removeClass('d-none');
 			setTimeout(function() {
 				$('#successAlert').addClass('d-none');
 			}, 2000);
+		}); */
+		
+		$('#showToastBtn').on('click', function() {
+		    // 유니크한 id 생성 (중복 방지)
+		    var uniqueId = 'successToast_' + Date.now();
+		    
+		    // toast HTML 템플릿 생성
+		    var toastHTML = `
+		        <div id="${uniqueId}" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+		            <div class="d-flex">
+		                <div class="toast-body">
+		                    Bootstrap이 성공적으로 적용되었습니다!
+		                </div>
+		                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+		            </div>
+		        </div>
+		    `;
+		    // toastContainer에 toast 요소 추가
+		    $('#toastContainer').append(toastHTML);
+
+		    // Bootstrap Toast 인스턴스 생성 및 show
+		    var toastEl = document.getElementById(uniqueId);
+		    var toast = new bootstrap.Toast(toastEl);
+		    toast.show();
+
+		    // 자동으로 사라진 후 DOM에서도 제거 (메모리 누수 방지)
+		    $(toastEl).on('hidden.bs.toast', function () {
+		        $(this).remove();
+		    });
 		});
 	});
 
