@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.planner.planner.todo.mapper.TodoMapper">
+	<insert id="insertTodo" parameterType="com.planner.planner.DTO.REQ.RequestTodoDTO">
+		INSERT INTO todo_manager 
+			(
+			userId, 
+			title, 
+			completed, 
+			dueDate,
+			completDate, 
+			useYn, 
+			insertUser, 
+			insertDate
+			)
+		VALUES 
+			(
+			'user01', 
+			#{title}, 
+			'ING', 
+			#{dueDate}, 
+			#{dueDate}, 
+			'Y', 
+			'user01', 
+			NOW()
+			);
+	</insert>
+	
+	<select id="findTodoById" parameterType="long" resultType="com.planner.planner.DTO.RES.ResponseTodoDTO">
+		SELECT
+			todoid,
+			userId,
+			title,
+			completed,
+			dueDate,
+			completDate,
+			useYn,
+			insertUser,
+			insertDate,
+			updateUser,
+			updateDate
+		FROM todo_manager
+		<!-- WHERE todoid = #{todoId} AND useYn = 'Y'; -->
+	</select>
+	
+	<select id="findAllByUserId" parameterType="string" resultType="com.planner.planner.DTO.RES.ResponseTodoDTO">
+		SELECT
+			todoid,
+			userId,
+			title,
+			completed,
+			dueDate,
+			completDate,
+			useYn,
+			insertUser,
+			insertDate,
+			updateUser,
+			updateDate
+		FROM todo_manager
+		<!-- WHERE userId = #{userId} AND useYn = 'Y'; -->
+	</select>
+	
+	<update id="updateTodo" parameterType="com.planner.planner.DTO.REQ.RequestTodoDTO">
+		UPDATE todo_manager
+		<set>
+			<if test="title != null and title != ''">
+				title = #{title},
+			</if>
+			<if test="completed != null and completed != ''">
+				completed = #{completed},
+			</if>
+			<if test="dueDate != null">
+				dueDate = #{dueDate},
+			</if>
+			<if test="completDate != null">
+				completDate = #{completDate},
+			</if>
+			updateUser = #{updateUser},
+			updateDate = NOW()
+		</set>
+		WHERE todoid = #{todoid};
+	</update>
+	
+	<delete id="deleteTodo" parameterType="long">
+		UPDATE todo_manager
+		SET useYn = 'N'
+		WHERE todoid = #{todoId};
+	</delete>
+</mapper>

@@ -1,5 +1,7 @@
 package com.planner.planner.main.controller;
 
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +19,16 @@ public class MainController {
 		model.addAttribute("message", "안녕하세요, Thymeleaf!");
         model.addAttribute("user", "홍길동");
         model.addAttribute("new", "권오태");
+        
+        LocalDateTime now = LocalDateTime.now();
+        model.addAttribute("today", now);
+        log.info("시간 확인 :::: {}" , now);
         return "main";
+	}
+	
+	@GetMapping("/todo")
+	public String getTodoPage() {
+		return "todo/todo";
 	}
 }
 

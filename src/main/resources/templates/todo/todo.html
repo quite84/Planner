@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>To-Do List</title>
+</head>
+<body>
+	<div th:insert="~{js/jQuery :: jquery}" />
+	<script
+		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+	<div th:replace="~{css/Bootstrap :: bootstrap}" /> 
+    <div layout:fragment="content">
+    <th:insert th:replace="~{layout}" />
+        <div class="container">
+            <h2>To-Do List</h2>
+
+            <!-- Add To-Do Form -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Add New To-Do</h5>
+                    <form id="add-todo-form">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dueDate" class="form-label">Due Date</label>
+                            <input type="date" class="form-control" id="dueDate" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- To-Do List -->
+            <ul class="list-group" id="todo-list">
+                <!-- To-Do items will be inserted here by JavaScript -->
+            </ul>
+        </div>
+
+        <script>
+            // Hardcoded user ID for demonstration
+            const userId = 'testuser'; 
+
+            document.addEventListener('DOMContentLoaded', function () {
+                loadTodos();
+
+                const addTodoForm = document.getElementById('add-todo-form');
+                addTodoForm.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    addTodo();
+                });
+            });
+
+            // Function to load to-dos
+            async function loadTodos() {
+                try {
+                    const response = await fetch(`/api/todos/user/${userId}`);
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch to-dos');
+                    }
+                    const todos = await response.json();
+                    const todoList = document.getElementById('todo-list');
+                    todoList.innerHTML = ''; // Clear the list
+                    todos.forEach(todo => {
+                        todoList.appendChild(createTodoElement(todo));
+                    });
+                } catch (error) {
+                    console.error(error);
+                    alert('Could not load to-dos.');
+                }
+            }
+
+            // Function to create a to-do list item element
+            function createTodoElement(todo) {
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                li.id = `todo-${todo.todoid}`;
+
+                const titleSpan = document.createElement('span');
+                titleSpan.textContent = todo.title + (todo.dueDate ? ` (Due: ${new Date(todo.dueDate).toLocaleDateString()})` : '');
+                if (todo.completed === 'Y') {
+                    titleSpan.style.textDecoration = 'line-through';
+                }
+                
+                const buttonsDiv = document.createElement('div');
+
+                const completeButton = document.createElement('button');
+                completeButton.className = `btn ${todo.completed === 'Y' ? 'btn-secondary' : 'btn-success'} btn-sm me-2`;
+                completeButton.textContent = todo.completed === 'Y' ? 'Undo' : 'Complete';
+                completeButton.onclick = () => toggleComplete(todo);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'btn btn-danger btn-sm';
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => deleteTodo(todo.todoid);
+
+                buttonsDiv.appendChild(completeButton);
+                buttonsDiv.appendChild(deleteButton);
+
+                li.appendChild(titleSpan);
+                li.appendChild(buttonsDiv);
+                
+                return li;
+            }
+
+            // Function to add a new to-do
+            async function addTodo() {
+                const title = document.getElementById('title').value;
+                const dueDate = document.getElementById('dueDate').value;
+
+                if (!title || !dueDate) {
+                    alert('Please provide a title and due date.');
+                    return;
+                }
+
+                const newTodo = {
+                    userId: userId,
+                    title: title,
+                    dueDate: new Date(dueDate).toISOString(),
+                    completed: 'N',
+                    insertUser: userId
+                };
+
+                try {
+                    const response = await fetch('/api/todos', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newTodo)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to add to-do');
+                    }
+                    
+                    document.getElementById('add-todo-form').reset();
+                    loadTodos(); // Reload the list
+                } catch (error) {
+                    console.error(error);
+                    alert('Could not add to-do.');
+                }
+            }
+
+            // Function to toggle complete status
+            async function toggleComplete(todo) {
+                const updatedTodo = {
+                    completed: todo.completed === 'Y' ? 'N' : 'Y',
+                    updateUser: userId
+                };
+
+                try {
+                    const response = await fetch(`/api/todos/${todo.todoid}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(updatedTodo)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to update to-do');
+                    }
+                    loadTodos(); // Reload the list
+                } catch (error) {
+                    console.error(error);
+                    alert('Could not update to-do status.');
+                }
+            }
+            
+            // Function to delete a to-do
+            async function deleteTodo(todoId) {
+                if (!confirm('Are you sure you want to delete this to-do?')) {
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`/api/todos/${todoId}`, {
+                        method: 'DELETE'
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to delete to-do');
+                    }
+                    loadTodos(); // Reload the list
+                } catch (error) {
+                    console.error(error);
+                    alert('Could not delete to-do.');
+                }
+            }
+        </script>
+    </div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-package com.planner.planner.main.service.Impl;
+package com.planner.planner.main.service.impl;
 
 import org.springframework.stereotype.Service;
 
