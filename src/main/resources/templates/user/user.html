@@ -8,6 +8,7 @@
 <title>User Data Page</title>
 </head>
 <body>
+<div class="container mt-4">
 	<div layout:fragment="content">
 
 		<!-- layout.html 적용 코드 타 html에서 insert 할때 참고 -->
@@ -19,6 +20,7 @@
 				<thead class="table-dark">
 					<tr>
 						<th>#</th>
+						<th>ID</th>
 						<th>이름</th>
 						<th>이메일</th>
 						<th>전화번호</th>
@@ -29,6 +31,7 @@
 				<tbody>
 					<tr th:each="user, stat : ${List}">
 						<td th:text="${stat.count}">1</td>
+						<td th:text="${user.userId}">1</td>
 						<td th:text="${user.userName}">홍길동</td>
 						<td th:text="${user.userEmail}">user01@email.com</td>
 						<td th:text="${user.userPhone}">010-1234-0001</td>
@@ -67,6 +70,7 @@
 			</table>
 
 		</div>
+	</div>
 	</div>
 </body>
 </html>

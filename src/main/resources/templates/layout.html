@@ -19,18 +19,19 @@
     </nav>
 
     <div class="container mt-4">
-        <th:block layout:fragment="content"></th:block>
+        <th:block layout:fragment="content">
+        안녕하세요. 개발자님!!
+        
+        </th:block>
     </div>
-    
-    
-    
 </body>
 
 <script>
+
 $(document).ready(function(){
 	$("#aa1").click(function(){
 		alert("MyApp 클릭 이벤트 입니다.")
-			
+		window.location.href = "/main";	
 	});
 })
 
