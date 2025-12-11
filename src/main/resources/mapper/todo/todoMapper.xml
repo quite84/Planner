@@ -18,13 +18,13 @@
 			)
 		VALUES 
 			(
-			'user01', 
+			#{userId}, 
 			#{title}, 
 			'ING', 
 			#{dueDate}, 
 			#{dueDate}, 
 			'Y', 
-			'user01', 
+			'SYSTEM', 
 			NOW()
 			);
 	</insert>
@@ -43,7 +43,7 @@
 			updateUser,
 			updateDate
 		FROM todo_manager
-		<!-- WHERE todoid = #{todoId} AND useYn = 'Y'; -->
+		WHERE todoid = #{todoId} AND useYn = 'Y';
 	</select>
 	
 	<select id="findAllByUserId" parameterType="string" resultType="com.planner.planner.DTO.RES.ResponseTodoDTO">
@@ -60,7 +60,7 @@
 			updateUser,
 			updateDate
 		FROM todo_manager
-		<!-- WHERE userId = #{userId} AND useYn = 'Y'; -->
+		WHERE userId = #{userId} AND useYn = 'Y';
 	</select>
 	
 	<update id="updateTodo" parameterType="com.planner.planner.DTO.REQ.RequestTodoDTO">

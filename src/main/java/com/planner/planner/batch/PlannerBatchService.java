@@ -24,8 +24,8 @@ public class PlannerBatchService {
 
 	@Scheduled(cron = "1 * * * * *")
 	public void getTime() throws Exception {
-		LocalDateTime now = LocalDateTime.now();
-		log.info("현재 시간 확인 ::: {}", now);
+//		LocalDateTime now = LocalDateTime.now();
+//		log.info("현재 시간 확인 ::: {}", now);
 	}
 	
 }

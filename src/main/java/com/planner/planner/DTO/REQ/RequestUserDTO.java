@@ -12,6 +12,8 @@ public class RequestUserDTO {
 	@JsonProperty
 	private String userName;
 	@JsonProperty
+	private String password;
+	@JsonProperty
 	private String userPhone;
 	@JsonProperty
 	private String userEmail;

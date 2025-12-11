@@ -16,11 +16,11 @@
 								<h4>로그인</h4>
 							</div>
 							<div class="card-body">
-								<form th:action="@{/login}" method="post">
+								<form id="userlogin">
 									<div class="mb-3">
-										<label for="username" class="form-label">아이디</label> <input
-											type="text" class="form-control" id="username"
-											name="username" required>
+										<label for="userId" class="form-label">아이디</label> <input
+											type="text" class="form-control" id="userId" name="userId"
+											required>
 									</div>
 									<div class="mb-3">
 										<label for="password" class="form-label">비밀번호</label> <input
@@ -31,9 +31,10 @@
 								</form>
 							</div>
 							<div class="card-footer text-center">
-								<p class="mb-0">
-									계정이 없으신가요? <a href="/register">회원가입</a>
-								</p>
+								<div class="d-flex justify-content-center gap-5">
+									<a href="/user/register">회원가입</a> 
+									<a href="/user/find">ID/PW 찾기</a>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -43,7 +44,24 @@
 	</div>
 </body>
 <script>
-
-
+	document.getElementById('userlogin').addEventListener('submit', async function(e) {
+	    e.preventDefault();  // 폼의 기본 제출 막기
+	
+	    const formData = new FormData(this);
+	
+	    const response = await fetch('/user/login', {
+	        method: 'POST',
+	        body: formData
+	    });
+	    const result = await response.json();
+	            
+	    if(result.resultCode === null) {
+	        // 예시: 실패 시 다른 페이지로 이동
+	        alert("회원 정보가 잘못 되었습니다.");
+	    } else {
+	        // 성공 등 다른 처리
+	    	alert("회원 입니다.");
+	    }
+	});
 </script>
 </html>

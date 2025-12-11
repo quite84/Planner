@@ -22,7 +22,6 @@ public class MainController {
         
         LocalDateTime now = LocalDateTime.now();
         model.addAttribute("today", now);
-        log.info("시간 확인 :::: {}" , now);
         return "main";
 	}
 	
