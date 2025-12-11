@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <body>
 
 	<th:block layout:fragment="css">
@@ -14,30 +15,34 @@
 			<div id="toastContainer"
 				class="toast-container position-fixed top-0 end-0 p-3"></div>
 
-			<h1 class="mb-4">Bootstrap 예제 버튼</h1>
-			<button type="button" id="a1" class="btn btn-primary">Primary
-				Button</button>
-			<button type="button" class="btn btn-success" id="showToastBtn">Success
-				Button</button>
-			<button type="button" class="btn btn-danger">Danger Button</button>
-			<hr>
-			<p>아래는 Bootstrap의 카드 컴포넌트 예시입니다.</p>
-
-			<!-- controller에서 타임립프로 데이터 노출을 위한 방법 -->
-			<p th:text="${message}" />
-			<p th:text="${user}" />
-
-			<div class="card" style="width: 18rem;">
-				<div class="card-body">
-					<h5 class="card-title">카드 제목</h5>
-					<p class="card-text">이 텍스트가 Bootstrap 카드 컴포넌트에 의해 꾸며집니다.</p>
-					<a href="#" class="btn btn-secondary">카드 버튼</a>
+			<div class="row justify-content-center">
+				<div class="card " style="width: 44rem;">
+					<h1 class="mb-4 justify-content-center">Bootstrap 예제 버튼</h1>
+					<div layout:fragment="content">
+					<button type="button" style="width: 13rem;" id="a1" class="btn btn-primary">Primary Button</button>
+					<button type="button" style="width: 13rem;" class="btn btn-success" id="showToastBtn">Success	Button</button>
+					<button type="button" style="width: 13rem;" class="btn btn-danger">Danger Button</button>
+					</div>
+					<hr>
+					<p>아래는 Bootstrap의 카드 컴포넌트 예시입니다.</p>
+		
+					<!-- controller에서 타임립프로 데이터 노출을 위한 방법 -->
+					<p th:text="${message}" />
+					<p th:text="${user}" />
+		
+					<div class="card" style="width: 30rem;">
+						<div class="card-body">
+							<h5 class="card-title">카드 제목</h5>
+							<p class="card-text">이 텍스트가 Bootstrap 카드 컴포넌트에 의해 꾸며집니다.</p>
+							<a href="#" class="btn btn-secondary">카드 버튼</a>
+						</div>
+					</div>
+					
 				</div>
 			</div>
 
 			<!-- 모달 트리거 버튼 -->
-			<button type="button" class="btn btn-primary" data-toggle="modal"
-				data-target="#myModal">모달 열기</button>
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">모달 열기</button>
 
 			<!-- 모달 내용 -->
 			<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
@@ -47,8 +52,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<h5 class="modal-title" id="myModalLabel">모달 제목</h5>
-							<button type="button" class="close" data-dismiss="modal"
-								aria-label="Close">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
 						</div>
@@ -63,8 +67,11 @@
 					</div>
 				</div>
 			</div>
+			
+			
 		</div>
 	</div>
+
 </body>
 <script>
 	$(document).ready(function() {

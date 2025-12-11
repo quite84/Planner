@@ -30,5 +30,10 @@ public class MainController {
 	public String getTodoPage() {
 		return "todo/todo";
 	}
+	
+	@GetMapping("/login")
+	public String getLoginPage() {
+		return "user/login";
+	}
 }
 
