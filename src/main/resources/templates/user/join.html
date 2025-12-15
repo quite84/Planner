@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Your Account</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 550px;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            font-weight: 700;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            padding: 12px 15px;
+            height: auto;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+        
+        .form-control.is-valid {
+            border-color: #28a745;
+        }
+        
+        .form-control.is-invalid {
+            border-color: #dc3545;
+        }
+        
+        .input-group .form-control {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        
+        .input-group .btn {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        label {
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+        
+        .btn-primary:disabled {
+            background: #ced4da;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn-secondary {
+            padding: .375rem .75rem;
+        }
+
+        .validation-message {
+            font-size: 0.875em;
+            margin-top: 5px;
+        }
+
+        .validation-message.text-danger { display: none; }
+        .validation-message.text-success { display: none; }
+
+        .is-invalid ~ .validation-message.text-danger { display: block; }
+        .is-valid ~ .validation-message.text-success { display: block; }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-header">
+            <h2>회원가입</h2>
+        </div>
+        <form id="joinForm" th:action="@{/user/join}" method="post" onsubmit="return finalValidation()">
+            <div class="form-group">
+                <label for="userId">아이디</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="userId" name="userId" placeholder="4자 이상" required>
+                    <button class="btn btn-secondary" type="button" id="idCheckButton">중복 확인</button>
+                </div>
+                <div id="idValidationMessage" class="validation-message"></div>
+            </div>
+            <div class="form-group">
+                <label for="password">비밀번호</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="영문, 숫자, 특수문자 포함 8자 이상" required>
+                <div class="validation-message text-danger">영문, 숫자, 특수문자를 포함하여 8자 이상이어야 합니다.</div>
+            </div>
+            <div class="form-group">
+                <label for="passwordConfirm">비밀번호 확인</label>
+                <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="비밀번호를 다시 입력하세요" required>
+                <div class="validation-message text-danger">비밀번호가 일치하지 않습니다.</div>
+            </div>
+            <hr class="my-4">
+             <div class="form-group">
+                <label for="name">이름</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요" required>
+                <div class="validation-message text-danger">이름을 입력해주세요.</div>
+            </div>
+            <div class="form-group">
+                <label for="email">이메일</label>
+                <div class="input-group">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="예: user@example.com" required>
+                    <button class="btn btn-secondary" type="button" id="emailCheckButton">중복 확인</button>
+                </div>
+                <div id="emailValidationMessage" class="validation-message"></div>
+            </div>
+            <div class="form-group">
+                <label for="tel">연락처</label>
+                <input type="tel" class="form-control" id="tel" name="tel" placeholder="'-' 없이 숫자만 입력" required>
+                <div class="validation-message text-danger">유효한 연락처를 입력해주세요.</div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3" id="joinSubmitButton" disabled>가입하기</button>
+        </form>
+    </div>
+
+    <script>
+        const joinSubmitButton = document.getElementById('joinSubmitButton');
+
+        const fields = {
+            userId: { input: document.getElementById('userId'), btn: document.getElementById('idCheckButton'), msg: document.getElementById('idValidationMessage'), isChecked: false },
+            email: { input: document.getElementById('email'), btn: document.getElementById('emailCheckButton'), msg: document.getElementById('emailValidationMessage'), isChecked: false },
+            password: { input: document.getElementById('password'), isValid: false },
+            passwordConfirm: { input: document.getElementById('passwordConfirm'), isValid: false },
+            name: { input: document.getElementById('name'), isValid: false },
+            tel: { input: document.getElementById('tel'), isValid: false }
+        };
+
+        function validateForm() {
+            const otherFieldsValid = fields.password.isValid && fields.passwordConfirm.isValid && fields.name.isValid && fields.tel.isValid;
+            joinSubmitButton.disabled = !(fields.userId.isChecked && fields.email.isChecked && otherFieldsValid);
+        }
+        
+        function setValidationStatus(field, isSuccess, message) {
+            field.input.classList.remove('is-invalid', 'is-valid');
+            field.msg.classList.remove('text-danger', 'text-success');
+            
+            if (isSuccess) {
+                field.input.classList.add('is-valid');
+                field.msg.classList.add('text-success');
+            } else {
+                field.input.classList.add('is-invalid');
+                field.msg.classList.add('text-danger');
+            }
+            field.msg.textContent = message;
+            field.msg.style.display = 'block';
+        }
+
+        // --- 아이디/이메일 중복 확인 ---
+        fields.userId.btn.addEventListener('click', () => {
+            const value = fields.userId.input.value;
+            if (value.length < 4) {
+                setValidationStatus(fields.userId, false, '아이디는 4자 이상이어야 합니다.');
+                fields.userId.isChecked = false;
+            } else if (value === 'test' || value === 'admin') { // Mock duplicate check
+                setValidationStatus(fields.userId, false, '이미 사용 중인 아이디입니다.');
+                fields.userId.isChecked = false;
+            } else {
+                setValidationStatus(fields.userId, true, '사용 가능한 아이디입니다.');
+                fields.userId.isChecked = true;
+                fields.userId.input.disabled = true; 
+                fields.userId.btn.disabled = true;
+            }
+            validateForm();
+        });
+
+        fields.email.btn.addEventListener('click', () => {
+            const value = fields.email.input.value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(value)) {
+                 setValidationStatus(fields.email, false, '유효한 이메일 형식이 아닙니다.');
+                 fields.email.isChecked = false;
+            } else if (value === 'test@test.com') { // Mock duplicate check
+                 setValidationStatus(fields.email, false, '이미 사용 중인 이메일입니다.');
+                 fields.email.isChecked = false;
+            } else {
+                 setValidationStatus(fields.email, true, '사용 가능한 이메일입니다.');
+                 fields.email.isChecked = true;
+                 fields.email.input.disabled = true;
+                 fields.email.btn.disabled = true;
+            }
+            validateForm();
+        });
+        
+        // --- 확인 후 수정 시 상태 초기화 ---
+        fields.userId.input.addEventListener('input', () => {
+           fields.userId.isChecked = false;
+           fields.userId.input.disabled = false;
+           fields.userId.btn.disabled = false;
+           fields.userId.input.classList.remove('is-valid', 'is-invalid');
+           fields.userId.msg.style.display = 'none';
+           validateForm();
+        });
+        
+        fields.email.input.addEventListener('input', () => {
+           fields.email.isChecked = false;
+           fields.email.input.disabled = false;
+           fields.email.btn.disabled = false;
+           fields.email.input.classList.remove('is-valid', 'is-invalid');
+           fields.email.msg.style.display = 'none';
+           validateForm();
+        });
+
+        // --- 나머지 필드 유효성 검사 (keyup) ---
+        const addKeyUpValidation = (field, conditionFn, validationMessageElement) => {
+            field.input.addEventListener('keyup', () => {
+                const isValid = conditionFn();
+                field.isValid = isValid;
+                field.input.classList.toggle('is-valid', isValid);
+                field.input.classList.toggle('is-invalid', !isValid);
+                if (validationMessageElement) {
+                   validationMessageElement.style.display = isValid ? 'none' : 'block';
+                }
+                validateForm();
+            });
+        };
+
+        addKeyUpValidation(fields.password, 
+            () => /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[a-zA-Z\d!@#$%^&*()_+]{8,}$/.test(fields.password.input.value),
+            fields.password.input.nextElementSibling
+        );
+        addKeyUpValidation(fields.passwordConfirm, 
+            () => fields.password.input.value === fields.passwordConfirm.input.value && fields.passwordConfirm.input.value !== '',
+            fields.passwordConfirm.input.nextElementSibling
+        );
+        addKeyUpValidation(fields.name, 
+            () => fields.name.input.value.trim() !== '',
+            fields.name.input.nextElementSibling
+        );
+        addKeyUpValidation(fields.tel, 
+            () => /^\d{10,11}$/.test(fields.tel.input.value),
+            fields.tel.input.nextElementSibling
+        );
+
+    </script>
+</body>
+</html>

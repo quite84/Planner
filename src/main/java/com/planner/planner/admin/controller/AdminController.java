@@ -1,9 +1,16 @@
 package com.planner.planner.admin.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.planner.planner.DTO.REQ.RequestUserDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,17 +20,29 @@ import lombok.extern.slf4j.Slf4j;
 public class AdminController {
 	
 	@GetMapping("/main")
-	public String getAdminMain() {
+	public String getAdminLoginPage() {
 		return "admin/login/adminLogin";
 	}
 
+//	@PostMapping("/login")
+//	public String getAdminPage() {
+//		boolean admin = false;
+//		
+//		if(!admin) {
+//			return "redirect:/admin/main";
+//		}
+//		return "admin/user/adminUserManager";
+//	}
+	
 	@PostMapping("/login")
-	public String getAdminPage() {
-		boolean admin = false;
+	public ResponseEntity<?> adminLogin(@ModelAttribute RequestUserDTO param) {
+		log.info("로그인 데이터 확인3 ::::: {} " , param);
+		Map<String, Object> result = new HashMap<>();
 		
-		if(!admin) {
-			return "redirect:/admin/main";
-		}
-		return "admin/user/adminUserManager";
-	}
+		result.put("resultCode", "1");
+		
+		return ResponseEntity.ok(result);
+	};
+	
+	
 }

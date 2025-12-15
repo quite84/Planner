@@ -19,7 +19,7 @@ public class SecurityConfig {
         
     	http
     	.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-    	.csrf(csrf -> csrf.disable()) // 현재는 csrf의 설정을 비활성화 시키는 상태임 , 활성화 시킬때, csrf 함수를 정의해야함. 서버에서 csrf 토큰 발급 및 브라우저 전송, 쿠키 저장 및 쿠키 발송까지 front에서 작업 진행 해야함.
+    	.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(authorize -> authorize
         		.requestMatchers("/**", "/css/**", "/js/**", "/images/**").permitAll()
         	    .anyRequest().authenticated()

@@ -33,7 +33,6 @@ public class UserController {
 		
 		List<ResponseUserDTO> List = new ArrayList<>();
 		
-		List = service.userSelect();
 		model.addAttribute("List", List);
 		
 		return "user/user";
@@ -42,6 +41,22 @@ public class UserController {
 	@GetMapping("/loginPage")
 	public String getUserLoginPage() {
 		return "user/login";
+	};
+	
+	@GetMapping("/joinPage")
+	public String getJoinPage() {
+		return "user/join";
+	}
+	
+	@PostMapping("/join")
+	public ResponseEntity<?> userJoin(@ModelAttribute RequestUserDTO param) {
+		log.info("회원가입 데이터 확인 ::::: {} " , param);
+		Map<String, Object> result = new HashMap<>();
+		
+		// 여기에 실제 회원가입 로직 (서비스 호출 등)을 추가할 수 있습니다.
+		result.put("resultCode", "1"); // 성공 가정
+		
+		return ResponseEntity.ok(result);
 	};
 		
 	@PostMapping("/login")
