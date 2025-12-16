@@ -114,4 +114,51 @@ public class UserController {
 		return ResponseEntity.ok(result);
 	};
 	
+	@PostMapping("/logOut")
+	public ResponseEntity<?> userLogOut(HttpSession session) {
+		Map<String, Object> result = new HashMap<>();
+		String userId = (String)session.getAttribute("userId");
+		
+		if(userId.isEmpty()||userId == null) {
+			result.put("resultCode", "400");
+			result.put("message", "알수 없는 오류가 발생 하였습니다. 다시 시도 바랍니다.");
+		}else {
+			session.removeAttribute("userId");
+			result.put("resultCode", "200");
+		}
+		
+		return ResponseEntity.ok(result);
+	};
+	
+	@PostMapping("/findByName")
+	public ResponseEntity<?> findByName(@ModelAttribute RequestUserDTO param, HttpSession session) {
+		log.info("findByName 진입 데이터 확인 :::: {}", param);
+		Map<String, Object> result = new HashMap<>();
+		
+		if(service.selectOnebyUser(param) != null) {
+			result.put("resultCode", "200");
+			result.put("message", service.selectOnebyUser(param).getUserId());
+		}else {
+			result.put("resultCode", "400");
+			result.put("message", "잘못된 데이터 입력으로 해당 고객을 찾을 수 없습니다.");
+		}
+		return ResponseEntity.ok(result);
+	};
+	
+	@PostMapping("/findById")
+	public ResponseEntity<?> findById(@ModelAttribute RequestUserDTO param, HttpSession session) {
+		log.info("findById 진입 데이터 확인 :::: {}", param);
+		Map<String, Object> result = new HashMap<>();
+		
+		if(service.selectOnebyUser(param) != null) {
+			service.upDateUserData(param);
+			result.put("resultCode", "200");
+			result.put("message", "임시 비밀번호를 발급 했습니다.");
+		}else {
+			result.put("resultCode", "400");
+			result.put("message", "잘못된 데이터 입력으로 해당 고객을 찾을 수 없습니다.");
+		}
+		
+		return ResponseEntity.ok(result);
+	};
 }

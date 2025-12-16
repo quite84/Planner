@@ -1,5 +1,7 @@
 package com.planner.planner.user.service.impl;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,5 +55,39 @@ public class userServiceImpl implements userService {
 		}
 		
 		return result;
-	}
+	};
+	
+	public ResponseUserDTO selectOnebyUser(RequestUserDTO param){
+		ResponseUserDTO result = new ResponseUserDTO();
+		result = mapper.selectOnebyUser(param);
+		return result;
+	};
+	
+	public int upDateUserData (RequestUserDTO param) {
+		int result = 0;
+		String originalString = "a123456789!";
+		 MessageDigest digest;
+		try {
+			digest = MessageDigest.getInstance("SHA-256");
+			byte[] encodedhash = digest.digest(originalString.getBytes());
+			log.info("원본 문자열 : " + originalString);
+			log.info("SHA-256 해시값 : " + toHexString(encodedhash));
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	        
+		
+		return result;
+	};
+	
+	public static String toHexString(byte[] hash) {
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hash) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
 }

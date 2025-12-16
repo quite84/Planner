@@ -14,5 +14,9 @@ public interface userMapper {
 	
 	List<ResponseUserDTO> selectOnebyCheck(RequestUserDTO param);
 	
+	ResponseUserDTO selectOnebyUser(RequestUserDTO param);
+	
 	int joinUser(RequestUserDTO param);
+	
+	int upDateUser(RequestUserDTO param);
 }

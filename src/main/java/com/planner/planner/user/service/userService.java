@@ -11,5 +11,9 @@ public interface userService {
 	
 	Boolean selectOnebyCheck(RequestUserDTO param);
 	
+	ResponseUserDTO selectOnebyUser(RequestUserDTO param);
+	
 	int joinUser(RequestUserDTO param);
+	
+	int upDateUserData (RequestUserDTO param);
 }

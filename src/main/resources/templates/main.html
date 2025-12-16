@@ -128,8 +128,7 @@
 	});
 
 	// 1. 서버시간을 JS Date 객체로 변환
-	let now = new Date(document.getElementById('realtime').textContent.replace(
-			'T', ' '));
+	let now = new Date(document.getElementById('realtime').textContent.replace('T', ' '));
 
 	// 2. 1초마다 시간 갱신
 	setInterval(function() {

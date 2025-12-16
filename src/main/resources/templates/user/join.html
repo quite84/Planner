@@ -84,10 +84,9 @@
             }
 
             const result = await response.json();
-			console.log("데이터 확인 :::: " + JSON.stringify(result));
-            if (result.resultCode === "200") { // Assuming "1" is success
+            if (result.resultCode === 200) { // Assuming "1" is success
                 alert("가입 성공!");
-                window.location.href = "/"; // Redirect to main page on success
+                window.location.href = "/todo"; // Redirect to main page on success
             } else {
                 alert("가입 실패: " + (result.message || "다시 시도 바랍니다."));
             }
