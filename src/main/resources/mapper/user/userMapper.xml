@@ -16,5 +16,57 @@
 	FROM USER_MASTER
 	
 	</select>
+	
+	<select id="selectOnebyCheck" parameterType="com.planner.planner.DTO.REQ.RequestUserDTO" resultType="com.planner.planner.DTO.RES.ResponseUserDTO">
+	
+	SELECT
+		USERID,
+		USERNAME,
+		USERPHONE,
+		USEREMAIL
+	FROM USER_MASTER
+	WHERE 1=1
+	AND USEYN = 'Y' 
+	<if test="userId != '' and userId != null">
+	AND USERID = #{userId}
+	</if>
+	<if test="password !='' and password != null">
+	AND PASSWORD = #{password}
+	</if>
+	<if test="userEmail != '' and userEmail != null">
+	AND USEREMAIL = #{userEmail}
+	</if>
+	</select>
+	
+	<insert id="joinUser" parameterType="com.planner.planner.DTO.REQ.RequestUserDTO">
+		INSERT INTO 
+		USER_MASTER	
+			(
+			USERID,
+			USERNAME,
+			PASSWORD,
+			USERPHONE,
+			USEREMAIL,
+			ROLE,
+			USEYN,
+			USERSTATUS,
+			INSERTUSER,
+			INSERTDATE
+			)
+		VALUE
+			(
+			#{userId},
+			#{userName},
+			#{password},
+			#{userPhone},
+			#{userEmail},
+			'user',
+			'Y',
+			'Active',
+			#{userId},
+			NOW()
+			)
+	</insert>
+	
 
 </mapper>

@@ -12,12 +12,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.planner.planner.DTO.REQ.RequestUserDTO;
 import com.planner.planner.DTO.RES.ResponseUserDTO;
 import com.planner.planner.user.service.userService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -33,6 +35,9 @@ public class UserController {
 		
 		List<ResponseUserDTO> List = new ArrayList<>();
 		
+		List = service.getUserList();
+		log.info("데이터 확인 :: {}" , List);
+		
 		model.addAttribute("List", List);
 		
 		return "user/user";
@@ -46,25 +51,65 @@ public class UserController {
 	@GetMapping("/joinPage")
 	public String getJoinPage() {
 		return "user/join";
-	}
+	};
+	
+	@GetMapping("/find")
+	public String getFindPage() {
+		return "user/find";
+	};
 	
 	@PostMapping("/join")
-	public ResponseEntity<?> userJoin(@ModelAttribute RequestUserDTO param) {
-		log.info("회원가입 데이터 확인 ::::: {} " , param);
+	public ResponseEntity<?> userJoin(@RequestBody RequestUserDTO param) {
+		log.info("join ::::: {} " , param);
 		Map<String, Object> result = new HashMap<>();
+		int code = service.joinUser(param);
 		
 		// 여기에 실제 회원가입 로직 (서비스 호출 등)을 추가할 수 있습니다.
-		result.put("resultCode", "1"); // 성공 가정
+		result.put("resultCode", code); // 성공 가정
 		
 		return ResponseEntity.ok(result);
 	};
 		
 	@PostMapping("/login")
-	public ResponseEntity<?> userLogin(@ModelAttribute RequestUserDTO param) {
-		log.info("로그인 데이터 확인3 ::::: {} " , param);
+	public ResponseEntity<?> userLogin(@ModelAttribute RequestUserDTO param, HttpSession session) {
+		log.info("login ::::: {} " , param);
 		Map<String, Object> result = new HashMap<>();
+		boolean exist = service.selectOnebyCheck(param); 
+		if(!exist) {
+			session.setAttribute("userId", param.getUserId());
+			result.put("resultCode", "200");	
+		}else {
+			result.put("resultCode", "400");
+		}
+				
+		return ResponseEntity.ok(result);
+	};
+	
+	@PostMapping("/idCheck")
+	public ResponseEntity<?> userIdCheck(@ModelAttribute RequestUserDTO param) {
+		log.info("idCheck ::::: {} " , param);
+		Map<String, Object> result = new HashMap<>();
+		boolean exist = service.selectOnebyCheck(param); 
+		if(exist) {
+			result.put("resultCode", "200");	
+		}else {
+			result.put("resultCode", "400");
+		}
 		
-		result.put("resultCode", "1");
+		return ResponseEntity.ok(result);
+	};
+	
+	@PostMapping("/emailCheck")
+	public ResponseEntity<?> userEmailCheck(@ModelAttribute RequestUserDTO param) {
+		log.info("emailCheck ::::: {} " , param);
+		Map<String, Object> result = new HashMap<>();
+		boolean exist = service.selectOnebyCheck(param); 
+		
+		if(exist) {
+			result.put("resultCode", "200");	
+		}else {
+			result.put("resultCode", "400");
+		}
 		
 		return ResponseEntity.ok(result);
 	};

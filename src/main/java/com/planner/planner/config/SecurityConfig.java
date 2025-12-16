@@ -28,6 +28,25 @@ public class SecurityConfig {
         return http.build();
     }
     
+    /*
+     *  csrf url 등록 과정 ignoringRequestMatchers으로 csrf 제외 url 등록 (제외 외에는 전부 csrf 적용) 
+     *  즉, .csrf(csrf -> csrf.disable())을 삭제하면 됨.
+     *   @Bean
+     *   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+     *   http
+     *       // ... 다른 설정들
+     *       .csrf(csrf -> csrf
+     *       // '/api/**' 와 '/other-path/**' 경로는 CSRF 보호를 적용하지 않음
+     *       .ignoringRequestMatchers("/api/**", "/other-path/**")
+     *       )
+     *       .authorizeHttpRequests(authorize -> authorize
+     *       .requestMatchers("/**", "/css/**", "/js/**", "/images/**").permitAll()
+     *       .anyRequest().authenticated()
+     *       );
+     *       return http.build();
+     *       } 
+     * */
+    
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
