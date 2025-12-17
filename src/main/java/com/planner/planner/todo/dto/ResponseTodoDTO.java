@@ -1,4 +1,4 @@
-package com.planner.planner.DTO.RES;
+package com.planner.planner.todo.dto;
 
 import java.time.LocalDateTime;
 

@@ -8,19 +8,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.planner.planner.DTO.REQ.RequestUserDTO;
-import com.planner.planner.DTO.RES.ResponseUserDTO;
-import com.planner.planner.user.mapper.userMapper;
-import com.planner.planner.user.service.userService;
+import com.planner.planner.user.dto.RequestUserDTO;
+import com.planner.planner.user.dto.ResponseUserDTO;
+import com.planner.planner.user.mapper.UserMapper;
+import com.planner.planner.user.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class userServiceImpl implements userService {
+public class UserServiceImpl implements UserService {
 
 	@Autowired
-	userMapper mapper;
+	UserMapper mapper;
 	
 	public List<ResponseUserDTO> getUserList(){
 		

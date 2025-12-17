@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.planner.planner.DTO.REQ.RequestUserDTO;
-import com.planner.planner.DTO.RES.ResponseUserDTO;
+import com.planner.planner.user.dto.RequestUserDTO;
+import com.planner.planner.user.dto.ResponseUserDTO;
 
 @Mapper
-public interface userMapper {
+public interface UserMapper {
 	
 	List<ResponseUserDTO> userSelect();
 	

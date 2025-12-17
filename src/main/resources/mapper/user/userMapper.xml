@@ -3,8 +3,8 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.planner.planner.user.mapper.userMapper">
-	<select id="userSelect" resultType="com.planner.planner.DTO.RES.ResponseUserDTO" >
+<mapper namespace="com.planner.planner.user.mapper.UserMapper">
+	<select id="userSelect" resultType="com.planner.planner.user.dto.ResponseUserDTO" >
 		SELECT 
 			USERID,
 			USERNAME,
@@ -15,7 +15,7 @@
 		FROM USER_MASTER
 	</select>
 	
-	<select id="selectOnebyCheck" parameterType="com.planner.planner.DTO.REQ.RequestUserDTO" resultType="com.planner.planner.DTO.RES.ResponseUserDTO">
+	<select id="selectOnebyCheck" parameterType="com.planner.planner.user.dto.RequestUserDTO" resultType="com.planner.planner.user.dto.ResponseUserDTO">
 		SELECT
 			USERID,
 			USERNAME,
@@ -35,7 +35,7 @@
 			</if>
 	</select>
 	
-	<insert id="joinUser" parameterType="com.planner.planner.DTO.REQ.RequestUserDTO">
+	<insert id="joinUser" parameterType="com.planner.planner.user.dto.RequestUserDTO">
 		INSERT INTO 
 		USER_MASTER	
 			(
@@ -65,7 +65,7 @@
 			)
 	</insert>
 	
-	<select id="selectOnebyUser" parameterType="com.planner.planner.DTO.REQ.RequestUserDTO" resultType="com.planner.planner.DTO.RES.ResponseUserDTO">
+	<select id="selectOnebyUser" parameterType="com.planner.planner.user.dto.RequestUserDTO" resultType="com.planner.planner.user.dto.ResponseUserDTO">
 		SELECT
 			USERID,
 			USERNAME,
@@ -85,7 +85,7 @@
 		</if>
 	</select>
 	
-	<update id="updateUserPass" parameterType="com.planner.planner.DTO.REQ.RequestUserDTO">
+	<update id="updateUserPass" parameterType="com.planner.planner.user.dto.RequestUserDTO">
 		UPDATE USER_MASTER
 		SET
 			PASSWORD = #{password}

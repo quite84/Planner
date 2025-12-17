@@ -1,4 +1,4 @@
-package com.planner.planner.DTO.RES;
+package com.planner.planner.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.planner.planner.DTO.REQ.RequestTodoDTO;
+import com.planner.planner.todo.dto.RequestTodoDTO;
 import com.planner.planner.todo.service.TodoService;
 
 @RestController

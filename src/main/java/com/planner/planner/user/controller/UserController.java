@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.planner.planner.DTO.REQ.RequestUserDTO;
-import com.planner.planner.DTO.RES.ResponseUserDTO;
-import com.planner.planner.user.service.userService;
+import com.planner.planner.user.dto.RequestUserDTO;
+import com.planner.planner.user.dto.ResponseUserDTO;
+import com.planner.planner.user.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 	
 	@Autowired
-	userService service;
+	UserService service;
 
 	@GetMapping("/main")
 	public String getUser(Model model) {

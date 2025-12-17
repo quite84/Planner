@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.planner.planner.DTO.REQ.RequestUserDTO;
+import com.planner.planner.user.dto.RequestUserDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,16 +24,6 @@ public class AdminController {
 		return "admin/login/adminLogin";
 	}
 
-//	@PostMapping("/login")
-//	public String getAdminPage() {
-//		boolean admin = false;
-//		
-//		if(!admin) {
-//			return "redirect:/admin/main";
-//		}
-//		return "admin/user/adminUserManager";
-//	}
-	
 	@PostMapping("/login")
 	public ResponseEntity<?> adminLogin(@ModelAttribute RequestUserDTO param) {
 		log.info("로그인 데이터 확인3 ::::: {} " , param);

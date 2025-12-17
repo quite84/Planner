@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.planner.planner.DTO.REQ.RequestTodoDTO;
+import com.planner.planner.todo.dto.RequestTodoDTO;
 
 @Mapper
 public interface TodoMapper {

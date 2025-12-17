@@ -2,10 +2,10 @@ package com.planner.planner.user.service;
 
 import java.util.List;
 
-import com.planner.planner.DTO.REQ.RequestUserDTO;
-import com.planner.planner.DTO.RES.ResponseUserDTO;
+import com.planner.planner.user.dto.RequestUserDTO;
+import com.planner.planner.user.dto.ResponseUserDTO;
 
-public interface userService {
+public interface UserService {
 
 	List<ResponseUserDTO> getUserList();
 	

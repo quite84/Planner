@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="com.planner.planner.todo.mapper.TodoMapper">
-	<insert id="insertTodo" parameterType="com.planner.planner.DTO.REQ.RequestTodoDTO">
+	<insert id="insertTodo" parameterType="com.planner.planner.todo.dto.RequestTodoDTO">
 		INSERT INTO todo_manager 
 			(
 			userId, 
@@ -29,7 +29,7 @@
 			);
 	</insert>
 	
-	<select id="findTodoById" parameterType="long" resultType="com.planner.planner.DTO.RES.ResponseTodoDTO">
+	<select id="findTodoById" parameterType="long" resultType="com.planner.planner.todo.dto.ResponseTodoDTO">
 		SELECT
 			todoid,
 			userId,
@@ -46,7 +46,7 @@
 		WHERE todoid = #{todoId} AND useYn = 'Y';
 	</select>
 	
-	<select id="findAllByUserId" parameterType="string" resultType="com.planner.planner.DTO.RES.ResponseTodoDTO">
+	<select id="findAllByUserId" parameterType="string" resultType="com.planner.planner.todo.dto.ResponseTodoDTO">
 		SELECT
 			todoid,
 			userId,
@@ -63,7 +63,7 @@
 		WHERE userId = #{userId} AND useYn = 'Y';
 	</select>
 	
-	<update id="updateTodo" parameterType="com.planner.planner.DTO.REQ.RequestTodoDTO">
+	<update id="updateTodo" parameterType="com.planner.planner.todo.dto.RequestTodoDTO">
 		UPDATE todo_manager
 		<set>
 			<if test="title != null and title != ''">

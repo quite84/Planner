@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.planner.planner.DTO.REQ.RequestTodoDTO;
+import com.planner.planner.todo.dto.RequestTodoDTO;
 import com.planner.planner.todo.mapper.TodoMapper;
 import com.planner.planner.todo.service.TodoService;
 

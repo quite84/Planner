@@ -2,7 +2,7 @@ package com.planner.planner.todo.service;
 
 import java.util.List;
 
-import com.planner.planner.DTO.REQ.RequestTodoDTO;
+import com.planner.planner.todo.dto.RequestTodoDTO;
 
 public interface TodoService {
 	public void createTodo(RequestTodoDTO todoDTO);
