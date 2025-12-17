@@ -34,7 +34,6 @@ public class userServiceImpl implements userService {
 		Boolean result = false;
 		List<ResponseUserDTO> exist = new ArrayList<>();
 		exist = mapper.selectOnebyCheck(param);
-		log.info("결과 확인 :::: {}" , exist);
 		if(exist.isEmpty()) {
 			result = true;
 		}else{
@@ -70,7 +69,6 @@ public class userServiceImpl implements userService {
 		try {
 			digest = MessageDigest.getInstance("SHA-256");
 			byte[] encodedhash = digest.digest(originalString.getBytes());
-			log.info("원본 문자열 : " + originalString);
 			log.info("SHA-256 해시값 : " + toHexString(encodedhash));
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block

@@ -34,10 +34,7 @@ public class UserController {
 	public String getUser(Model model) {
 		
 		List<ResponseUserDTO> List = new ArrayList<>();
-		
 		List = service.getUserList();
-		log.info("데이터 확인 :: {}" , List);
-		
 		model.addAttribute("List", List);
 		
 		return "user/user";
@@ -116,6 +113,7 @@ public class UserController {
 	
 	@PostMapping("/logOut")
 	public ResponseEntity<?> userLogOut(HttpSession session) {
+		log.info("logOut ::::: {} " , session.getAttribute("userId"));
 		Map<String, Object> result = new HashMap<>();
 		String userId = (String)session.getAttribute("userId");
 		
