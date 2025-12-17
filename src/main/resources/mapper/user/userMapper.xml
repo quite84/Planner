@@ -87,8 +87,7 @@
 	
 	<update id="updateUserPass" parameterType="com.planner.planner.user.dto.RequestUserDTO">
 		UPDATE USER_MASTER
-		SET
-			PASSWORD = #{password}
+		SET	PASSWORD = #{password}
 		WHERE USERID = #{userId}
 	</update>
 

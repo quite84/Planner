@@ -14,6 +14,9 @@
 	<div class="container mt-4">
 		<div layout:fragment="content">
 			<th:insert th:replace="~{layout}" />
+			<!-- 우측 상단 고정 Toast 컨테이너 (id 부여) -->
+			<div id="toastContainer"
+				class="toast-container position-fixed top-0 end-0 p-3"></div>
 			<div class="container">
 				<div class="d-flex justify-content-between align-items-center mb-3">
 					<h2>To-Do List</h2>
@@ -42,11 +45,51 @@
 				<!-- To-Do List -->
 				<div class="d-flex justify-content-between align-items-center mb-3">
 					<h5>[[${userId}]] 님의 할일 내역입니다.</h5>
-					<a href="/" class="btn btn-secondary">회원 정보 수정</a>
+					<!-- <a href="/user/updatePage" class="btn btn-secondary">회원 정보 수정</a> -->
+
+					<!-- 이번 모달 팝업의 데이터 전송을 jquery와 ajax 통신방식으로 코드 작성 -->
+					<button type="button" class="btn btn-secondary" data-toggle="modal"
+						data-target="#myModal">회원 정보 수정</button>
+					<!-- 모달 내용 start -->
+					<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+						aria-labelledby="myModalLabel" aria-hidden="true"
+						data-backdrop="static">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="myModalLabel">비밀번호 입력</h5>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<form id="modalForm">
+									<div class="modal-body">
+										<label for="modalInput">비밀번호 입력:</label>
+										<input type="password"
+											id="modalInput" class="form-control" name="inputValue"
+											required>
+									</div>
+									<div class="modal-footer d-flex justify-content-end">
+										<button type="submit" class="btn btn-primary"
+											style="width: 4rem;">확인</button>
+										<button type="button" class="btn btn-secondary"
+											data-dismiss="modal" style="width: 4rem;">닫기</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<!-- 모달 내용 end -->
 				</div>
+				
+				
 				<ul class="list-group" id="todo-list">
 					<!-- To-Do items will be inserted here by JavaScript -->
 				</ul>
+				
+				
+				
 			</div>
 		</div>
 	</div>
@@ -69,6 +112,28 @@
                 });
             });
 
+            // 토스트 팝업 노출을 위한 함수
+            function showSuccessToast(message) {
+                var uniqueId = 'successToast_' + Date.now();
+                var toastHTML = `
+                    <div id="${uniqueId}" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                ${message}
+                            </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
+                `;
+                $('#toastContainer').append(toastHTML);
+                var toastEl = document.getElementById(uniqueId);
+                var toast = new bootstrap.Toast(toastEl);
+                toast.show();
+                $(toastEl).on('hidden.bs.toast', function () {
+                    $(this).remove();
+                });
+            }
+
             // Function to load to-dos
             async function loadTodos() {
                 try {
@@ -79,9 +144,23 @@
                     const todos = await response.json();
                     const todoList = document.getElementById('todo-list');
                     todoList.innerHTML = ''; // Clear the list
-                    todos.forEach(todo => {
-                        todoList.appendChild(createTodoElement(todo));
-                    });
+                    
+                    if (todos.length === 0) {
+                        // 할 일이 없는 경우 안내 문구 추가
+                        const emptyMessage = document.createElement('ui');
+                        emptyMessage.textContent = '아직 할일 내역이 없습니다.';
+                        emptyMessage.style.color = 'green'; // (선택) 안내문구 스타일
+                        todoList.appendChild(emptyMessage);
+                    } else {
+                        todos.forEach(todo => {
+                            todoList.appendChild(createTodoElement(todo));
+                        });
+                    }
+                    
+                    //todos.forEach(todo => {
+                    //    todoList.appendChild(createTodoElement(todo));
+                    //});
+                    
                 } catch (error) {
                     console.error(error);
                     alert('Could not load to-dos.');
@@ -150,6 +229,7 @@
                         throw new Error('Failed to add to-do');
                     }
                     
+                    showSuccessToast("새로운 할 일이 추가되었습니다!");
                     document.getElementById('add-todo-form').reset();
                     loadTodos(); // Reload the list
                 } catch (error) {
@@ -218,5 +298,40 @@
                     }	
             	}
             });
+            
+            $(document).ready(function(){
+            	$("#modalForm").on("submit", async function (e){
+            		 e.preventDefault();
+            		 const pass = $("#modalInput").val();
+            		 
+            		 const encoder = new TextEncoder();
+                     const data = encoder.encode(pass);
+                     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+                     const hashArray = Array.from(new Uint8Array(hashBuffer));
+                     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            		 
+                     var userData = {
+                    		 userId: '[[${userId}]]',
+                    		 password: hashHex
+                     };
+                    $.ajax({
+                         url: '/user/passwordCheck',  // 여기에 실제 서버 엔드포인트 입력
+                         type: 'POST',
+                         data: JSON.stringify(userData),
+                         contentType: 'application/json',
+                         success: function (response) {
+                        	 if(response.resultCode === '200'){
+                        		 $('#myModal').modal('hide');
+                                 window.location.href='/user/updatePage';	 
+                        	 }else{
+                        		 alert('비밀번호 입력이 잘못 되었습니다. 다시 입력 바랍니다.');
+                        	 }
+                         },
+                         error: function () {
+                             alert('알수 없는 오류가 발생 하였습니다. 잠시후 재시도 바랍니다.');
+                         }
+                     });
+            	});
+            })
         </script>
 </html>

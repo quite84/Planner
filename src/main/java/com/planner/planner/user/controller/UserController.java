@@ -55,6 +55,15 @@ public class UserController {
 		return "user/find";
 	};
 	
+	@GetMapping("/updatePage")
+	public String getUpdatePage(Model model, HttpSession session) {
+		
+		model.addAttribute("userId", session.getAttribute("userId"));
+		return "/user/update";
+	};
+	
+	/*--------------------------------------------------------------------------------------------------------------------------*/
+	
 	@PostMapping("/join")
 	public ResponseEntity<?> userJoin(@RequestBody RequestUserDTO param) {
 		log.info("join ::::: {} " , param);
@@ -99,6 +108,21 @@ public class UserController {
 	@PostMapping("/emailCheck")
 	public ResponseEntity<?> userEmailCheck(@ModelAttribute RequestUserDTO param) {
 		log.info("emailCheck ::::: {} " , param);
+		Map<String, Object> result = new HashMap<>();
+		boolean exist = service.selectOnebyCheck(param); 
+		
+		if(exist) {
+			result.put("resultCode", "200");	
+		}else {
+			result.put("resultCode", "400");
+		}
+		
+		return ResponseEntity.ok(result);
+	};
+	
+	@PostMapping("/passwordCheck")
+	public ResponseEntity<?> userpasswordCheck(@RequestBody RequestUserDTO param) {
+		log.info("passwordCheck ::::: {} " , param);
 		Map<String, Object> result = new HashMap<>();
 		boolean exist = service.selectOnebyCheck(param); 
 		
@@ -159,4 +183,27 @@ public class UserController {
 		
 		return ResponseEntity.ok(result);
 	};
+	
+	@PostMapping("/detail")
+	public ResponseEntity<?> detailById(@ModelAttribute RequestUserDTO param, HttpSession session) {
+		log.info("detail 진입 데이터 확인 :::: {}", param);
+		
+		ResponseUserDTO result = new ResponseUserDTO(); 
+		
+		
+		
+		return ResponseEntity.ok(result);
+	};
+	
+	@PostMapping("/update")
+	public ResponseEntity<?> updateById(@ModelAttribute RequestUserDTO param, HttpSession session) {
+		log.info("update 진입 데이터 확인 :::: {}", param);
+		
+		ResponseUserDTO result = new ResponseUserDTO(); 
+		
+		
+		
+		return ResponseEntity.ok(result);
+	};
+	
 }
