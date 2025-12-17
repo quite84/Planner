@@ -65,17 +65,21 @@ public class userServiceImpl implements userService {
 	public int upDateUserData (RequestUserDTO param) {
 		int result = 0;
 		String originalString = "a123456789!";
-		 MessageDigest digest;
+		MessageDigest digest;
 		try {
 			digest = MessageDigest.getInstance("SHA-256");
 			byte[] encodedhash = digest.digest(originalString.getBytes());
 			log.info("SHA-256 해시값 : " + toHexString(encodedhash));
+			
+			param.setPassword(toHexString(encodedhash));
+			mapper.updateUserPass(param);
+			result=200;
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.info("NoSuchAlgorithmException error :::: {}", e.getMessage());
+		} catch (Exception e) {
+			log.info("Exception error :::: {}", e.getMessage());
 		}
 	        
-		
 		return result;
 	};
 	

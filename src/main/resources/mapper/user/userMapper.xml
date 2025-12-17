@@ -5,37 +5,34 @@
 
 <mapper namespace="com.planner.planner.user.mapper.userMapper">
 	<select id="userSelect" resultType="com.planner.planner.DTO.RES.ResponseUserDTO" >
-	
-	SELECT 
-		USERID,
-		USERNAME,
-		USERPHONE,
-		USEREMAIL,
-		ROLE,
-		INSERTDATE
-	FROM USER_MASTER
-	
+		SELECT 
+			USERID,
+			USERNAME,
+			USERPHONE,
+			USEREMAIL,
+			ROLE,
+			INSERTDATE
+		FROM USER_MASTER
 	</select>
 	
 	<select id="selectOnebyCheck" parameterType="com.planner.planner.DTO.REQ.RequestUserDTO" resultType="com.planner.planner.DTO.RES.ResponseUserDTO">
-	
-	SELECT
-		USERID,
-		USERNAME,
-		USERPHONE,
-		USEREMAIL
-	FROM USER_MASTER
-	WHERE 1=1
-	AND USEYN = 'Y' 
-		<if test="userId != '' and userId != null">
-		AND USERID = #{userId}
-		</if>
-		<if test="password !='' and password != null">
-		AND PASSWORD = #{password}
-		</if>
-		<if test="userEmail != '' and userEmail != null">
-		AND USEREMAIL = #{userEmail}
-		</if>
+		SELECT
+			USERID,
+			USERNAME,
+			USERPHONE,
+			USEREMAIL
+		FROM USER_MASTER
+		WHERE 1=1
+		AND USEYN = 'Y' 
+			<if test="userId != '' and userId != null">
+			AND USERID = #{userId}
+			</if>
+			<if test="password !='' and password != null">
+			AND PASSWORD = #{password}
+			</if>
+			<if test="userEmail != '' and userEmail != null">
+			AND USEREMAIL = #{userEmail}
+			</if>
 	</select>
 	
 	<insert id="joinUser" parameterType="com.planner.planner.DTO.REQ.RequestUserDTO">
@@ -86,15 +83,13 @@
 		<if test="userEmail != '' and userEmail != null">
 		AND USEREMAIL = #{userEmail}
 		</if>
-	
 	</select>
 	
-	<update id="upDateUser" parameterType="com.planner.planner.DTO.REQ.RequestUserDTO">
-	UPDATE USER_MASTER
-	SET
-		PASSWORD = #{password}
-	WHERE USERID = #{userId}
+	<update id="updateUserPass" parameterType="com.planner.planner.DTO.REQ.RequestUserDTO">
+		UPDATE USER_MASTER
+		SET
+			PASSWORD = #{password}
+		WHERE USERID = #{userId}
 	</update>
-	
 
 </mapper>

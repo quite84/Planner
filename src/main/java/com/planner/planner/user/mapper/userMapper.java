@@ -18,5 +18,5 @@ public interface userMapper {
 	
 	int joinUser(RequestUserDTO param);
 	
-	int upDateUser(RequestUserDTO param);
+	int updateUserPass(RequestUserDTO param);
 }
