@@ -1,5 +1,7 @@
 package com.planner.planner.admin.service;
 
-public interface AdminService {
+import com.planner.planner.admin.dto.DashboardDTO;
 
+public interface AdminService {
+	public DashboardDTO getDashboardData();
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.planner.planner.admin.mapper.AdminMapper">
+	<select id="getTotalUserCount" resultType="int">
+		SELECT count(*) FROM USER_MASTER;
+	</select>
+	<select id="getTodayUserCount" resultType="int">
+		SELECT count(*) FROM USER_MASTER WHERE DATE(INSERTDATE) = CURDATE();
+	</select>
+	<select id="getTotalTodoCount" resultType="int">
+		SELECT count(*) FROM todo_manager;
+	</select>
+	<select id="getTodayTodoCount" resultType="int">
+		SELECT count(*) FROM todo_manager WHERE DATE(insertDate) = CURDATE();
+	</select>
+</mapper>
