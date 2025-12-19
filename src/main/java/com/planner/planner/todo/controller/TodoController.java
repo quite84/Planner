@@ -26,8 +26,6 @@ public class TodoController {
 	
 	@PostMapping
 	public ResponseEntity<Void> createTodo(@RequestBody RequestTodoDTO todoDTO) {
-		// In a real application, you'd get the user from the security context.
-		// For now, let's assume the insertUser is set in the DTO.
 		todoService.createTodo(todoDTO);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
@@ -47,8 +45,6 @@ public class TodoController {
 	@PutMapping("/{todoId}")
 	public ResponseEntity<Void> updateTodo(@PathVariable Long todoId, @RequestBody RequestTodoDTO todoDTO) {
 		todoDTO.setTodoid(todoId);
-		// In a real application, you'd get the user from the security context.
-		// For now, let's assume the updateUser is set in the DTO.
 		todoService.updateTodo(todoDTO);
 		return ResponseEntity.ok().build();
 	}

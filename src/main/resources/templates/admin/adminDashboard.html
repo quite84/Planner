@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <title>관리자 대시보드</title>
 </head>
 <body>
 <div layout:fragment="content">
+<th:insert th:replace="~{layout}" />
     <div class="container mt-4">
         <h1 class="mb-4">관리자 대시보드</h1>
 
@@ -18,7 +18,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">총 사용자 수</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${dashboard.totalUserCount}">0</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" >0</div>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -33,7 +33,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">오늘 가입자 수</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${dashboard.todayUserCount}">0</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" >0</div>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-user-plus fa-2x text-gray-300"></i>
@@ -48,7 +48,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-info text-uppercase mb-1">총 투두 수</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${dashboard.totalTodoCount}">0</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" >0</div>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-tasks fa-2x text-gray-300"></i>
@@ -63,7 +63,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">오늘 생성된 투두</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${dashboard.todayTodoCount}">0</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" >0</div>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>

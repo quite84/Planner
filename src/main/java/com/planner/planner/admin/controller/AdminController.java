@@ -25,6 +25,11 @@ public class AdminController {
 	public String getAdminLoginPage() {
 		return "admin/adminLogin";
 	}
+	
+	@GetMapping("/dash")
+	public String getDash() {
+		return "admin/adminDashBoard";
+		}
 
 	@PostMapping("/login")
 	public ResponseEntity<?> adminLogin(@ModelAttribute RequestUserDTO param) {
@@ -35,6 +40,4 @@ public class AdminController {
 		
 		return ResponseEntity.ok(result);
 	};
-	
-	
 }

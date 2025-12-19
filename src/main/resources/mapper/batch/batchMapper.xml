@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.planner.planner.batch.mapper.BatchServiceMapper">
+	<select id="getNotComplTodoList" parameterType="string" resultType="com.planner.planner.todo.dto.ResponseTodoDTO">
+		<![CDATA[
+		SELECT 
+			todoid,
+			userId,
+			dueDate,
+			completDate
+		FROM todo_manager
+		WHERE 1=1
+		AND useYn = 'Y'
+		AND completed != 'Y'
+		AND completDate <= #{dateNow}
+		]]> ;
+	</select>
+	
+	<update id="updateNotComplTodoList" parameterType="long">
+		UPDATE todo_manager
+		SET 
+			completDate = NULL,
+			completed = 'N'
+			userYn = 'N'
+		WHERE todoid = #{todoid}
+	</update>
+	
+	<select id="selectOneBatch" parameterType="string" resultType="com.planner.planner.batch.dto.ResponseBatchDTO">
+		SELECT
+			batchId
+		FROM
+		WHERE 1=1
+		AND batchId = #{batchId}
+	</select>
+	
+	<update id="updateBatch" parameterType="com.planner.planner.batch.dto.RequestBatchDTO">
+		UPDATE batch
+		SET 
+			<if test="batchStatus != null">
+			batchStatus = #{batchStatus},
+			</if>
+			<if test="startDate != null">
+			startDate = #{startDate},
+			</if>
+			<if test="endDate != null">
+			endDate = #{endDate},
+			</if>
+			updateUser = 'System',
+			updateDate = #{updateDate}
+		WHERE
+			batchId = #{batchId}
+	</update>
+
+</mapper>
