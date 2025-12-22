@@ -39,17 +39,8 @@ public class PlannerBatchService {
 	
 	 @Scheduled(cron = "0 0 1 * * *") 
 	 public void getTodoUpdate() throws Exception{
-//		 RequestBatchDTO batch = new RequestBatchDTO();
-//		 String nowDate = now.toString();
-//		 batch.setBatchId("BatchService002");
-//		 batch.setBatchStatus("start");
-//		 batch.setUpdateUser("System");
-//		 batch.setUpdateDate(nowDate);
-//		 
-//		 mapper.updateBatch(batch);
-		 
+		 log.info("현재 batch002 시작 ::: {}", now);		 
 		 bat02.todoListUpdate();
-		 
 	 }
 	 
 

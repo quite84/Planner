@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.planner.planner.batch.dto.RequestBatchDTO;
 import com.planner.planner.batch.dto.ResponseBatchDTO;
+import com.planner.planner.todo.dto.RequestTodoDTO;
 import com.planner.planner.todo.dto.ResponseTodoDTO;
 
 @Mapper
@@ -17,5 +18,5 @@ public interface BatchServiceMapper {
 	
 	List<ResponseTodoDTO> getNotComplTodoList(String dateNow);
 	
-	int updateNotComplTodo(Long todoid);
+	int updateNotComplTodo(RequestTodoDTO param);
 }

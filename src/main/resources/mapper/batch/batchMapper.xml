@@ -18,12 +18,12 @@
 		]]> ;
 	</select>
 	
-	<update id="updateNotComplTodoList" parameterType="long">
+	<update id="updateNotComplTodo" parameterType="com.planner.planner.todo.dto.RequestTodoDTO">
 		UPDATE todo_manager
 		SET 
 			completDate = NULL,
-			completed = 'N'
-			userYn = 'N'
+			completed = 'N',
+			useYn = 'N'
 		WHERE todoid = #{todoid}
 	</update>
 	
@@ -47,7 +47,9 @@
 			<if test="endDate != null">
 			endDate = #{endDate},
 			</if>
-			updateUser = 'System',
+			<if test="updateUser != null">
+			updateUser = #{updateUser},
+			</if>
 			updateDate = #{updateDate}
 		WHERE
 			batchId = #{batchId}
