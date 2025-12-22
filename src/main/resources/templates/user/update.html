@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Your Account</title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/global.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Update Your Account</title>
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/global.css">
 </head>
 <body>
-    <div class="container">
-        <div class="form-header">
-            <h2>회원 정보 수정</h2>
-        </div>
-        <!-- <form id="joinForm" th:action="@{/user/join}" method="post" onsubmit="return finalValidation()"> -->
-        <form id="joinForm">
-            <div class="form-group">
-                <label for="userId">아이디</label>
-                <div class="input-group">
-                    <input type="text" class="form-control" id="userId" name="userId" th:value="${userId}" disabled>
-                </div>
-                <div id="idValidationMessage" class="validation-message"></div>
-            </div>
-            <!-- <div class="form-group">
+	<div class="container">
+		<div class="form-header">
+			<h2>회원 정보 수정</h2>
+		</div>
+		<!-- <form id="joinForm" th:action="@{/user/join}" method="post" onsubmit="return finalValidation()"> -->
+		<form id="updateForm">
+			<div class="form-group">
+				<label for="userId">아이디</label>
+				<div class="input-group">
+					<input type="text" class="form-control" id="userId" name="userId"
+						th:value="${userId}" disabled>
+				</div>
+				<div id="idValidationMessage" class="validation-message"></div>
+			</div>
+			<!-- <div class="form-group">
                 <label for="password">비밀번호</label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="영문, 숫자, 특수문자 포함 8자 이상" required>
                 <div class="validation-message text-danger">영문, 숫자, 특수문자를 포함하여 8자 이상이어야 합니다.</div>
@@ -31,31 +32,35 @@
                 <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="비밀번호를 다시 입력하세요" required>
                 <div class="validation-message text-danger">비밀번호가 일치하지 않습니다.</div>
             </div> -->
-            <hr class="my-4">
-             <div class="form-group">
-                <label for="userName">이름</label>
-                <input type="text" class="form-control" id="userName" name="userName" placeholder="이름을 입력하세요" required>
-                <div class="validation-message text-danger">이름을 입력해주세요.</div>
-            </div>
-            <div class="form-group">
-                <label for="userEmail">이메일</label>
-                <div class="input-group">
-                    <input type="email" class="form-control" id="userEmail" name="userEmail" placeholder="예: user@example.com" required>
-                    <button class="btn btn-secondary" type="button" id="emailCheckButton">중복 확인</button>
-                </div>
-                <div id="emailValidationMessage" class="validation-message"></div>
-            </div>
-            <div class="form-group">
-                <label for="userPhone">연락처</label>
-                <input type="tel" class="form-control" id="userPhone" name="userPhone" placeholder="'-' 없이 숫자만 입력" required>
-                <div class="validation-message text-danger">유효한 연락처를 입력해주세요.</div>
-            </div>
-            <button type="submit" class="btn btn-primary mt-3" id="joinSubmitButton" disabled>수정하기</button>
-        </form>
-    </div>
+			<hr class="my-4">
+			<div class="form-group">
+				<label for="userName">이름</label> <input type="text"
+					class="form-control" id="userName" name="userName"
+					placeholder="이름을 입력하세요" required>
+				<div class="validation-message text-danger">이름을 입력해주세요.</div>
+			</div>
+			<div class="form-group">
+				<label for="userEmail">이메일</label>
+				<div class="input-group">
+					<input type="email" class="form-control" id="userEmail"
+						name="userEmail" placeholder="예: user@example.com" required>
+					<button class="btn btn-secondary" type="button"
+						id="emailCheckButton">중복 확인</button>
+				</div>
+				<div id="emailValidationMessage" class="validation-message"></div>
+			</div>
+			<div class="form-group">
+				<label for="userPhone">연락처</label> <input type="tel"
+					class="form-control" id="userPhone" name="userPhone"
+					placeholder="'-' 없이 숫자만 입력" required>
+				<div class="validation-message text-danger">유효한 연락처를 입력해주세요.</div>
+			</div>
+			<button type="submit" class="btn btn-primary mt-3"
+				id="updateSubmitButton" disabled>수정하기</button>
+		</form>
+	</div>
 
-    <script>
-    
+	<script>
     const userId = "[[${userId}]]";
     
     if(userId == '' || userId == null){
@@ -81,28 +86,28 @@
 			if (!response.ok) {
                 throw new Error('고객정보 조회중 오류가 발생 하였습니다.');
             }
-			console.log("결과 확인 :::: " + JSON.stringify(response));
+			const result = await response.json(); // 실제 응답 데이터 추출
+			
+			if(result){
+				document.getElementById("userName").value = result.userName;
+				document.getElementById("userEmail").value = result.userEmail;
+				document.getElementById("userPhone").value = result.userPhone;
+			}
+			
 		}catch (error) {
             console.error('Login error:', error);
-            
         }
 	}
-    /* document.getElementById('joinForm').addEventListener('submit', async function(e) {
+    
+    document.getElementById('updateForm').addEventListener('submit', async function(e) {
         e.preventDefault();
-        
         const formData = new FormData(this);
-        const password = formData.get('password');
+   		formData.set("userId", userId);
+        console.log("진입 데이터 확인 ::::: " + JSON.stringify(Object.fromEntries(formData)))
         
-        try {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(password);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-
-            formData.set("password", hashHex);
-
-            const response = await fetch('/user/join', {
+        try{
+        	
+        	const response = await fetch('/user/update', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -115,168 +120,17 @@
             }
 
             const result = await response.json();
-            if (result.resultCode === 200) { // Assuming "1" is success
-                alert("가입 성공!");
-                window.location.href = "/todo"; // Redirect to main page on success
-            } else {
-                alert("가입 실패: " + (result.message || "다시 시도 바랍니다."));
-            }
+            
+            console.log("결과 데이터 확인 ::::: " + JSON.stringify(result));
+        	
         } catch (error) {
-            console.error('Login error:', error);
-            alert('회원 가입 중 오류가 발생했습니다.');
-        }
-    }); */
-    
-        /* const joinSubmitButton = document.getElementById('joinSubmitButton');
-
-        const fields = {
-            userId: { input: document.getElementById('userId'), btn: document.getElementById('idCheckButton') },
-            userEmail: { input: document.getElementById('userEmail'), btn: document.getElementById('emailCheckButton'), msg: document.getElementById('emailValidationMessage'), isChecked: false },
-            password: { input: document.getElementById('password'), isValid: false },
-            passwordConfirm: { input: document.getElementById('passwordConfirm'), isValid: false },
-            userName: { input: document.getElementById('userName'), isValid: false },
-            userPhone: { input: document.getElementById('userPhone'), isValid: false }
-        };
-
-        function validateForm() {
-            const otherFieldsValid = fields.password.isValid && fields.passwordConfirm.isValid && fields.userName.isValid && fields.userPhone.isValid;
-            joinSubmitButton.disabled = !(fields.userId.isChecked && fields.userEmail.isChecked && otherFieldsValid);
+            console.error('userUpdate error:', error);
+            alert('회원 수정 중 오류가 발생했습니다.');
         }
         
-        function setValidationStatus(field, isSuccess, message) {
-            field.input.classList.remove('is-invalid', 'is-valid');
-            field.msg.classList.remove('text-danger', 'text-success');
-            
-            if (isSuccess) {
-                field.input.classList.add('is-valid');
-                field.msg.classList.add('text-success');
-            } else {
-                field.input.classList.add('is-invalid');
-                field.msg.classList.add('text-danger');
-            }
-            field.msg.textContent = message;
-            field.msg.style.display = 'block';
-        }
-
-        // --- 아이디/이메일 중복 확인 ---
-        fields.userId.btn.addEventListener('click', async () => {
-            const value = fields.userId.input.value;
-            
-            const result = await checklogic ('userId', value);
-            if (value.length < 4) {
-                setValidationStatus(fields.userId, false, '아이디는 4자 이상이어야 합니다.');
-                fields.userId.isChecked = false;
-            } else if (!result) { // Mock duplicate check
-                setValidationStatus(fields.userId, false, '이미 사용 중인 아이디입니다.');
-                fields.userId.isChecked = false;
-            } else {
-                setValidationStatus(fields.userId, true, '사용 가능한 아이디입니다.');
-                fields.userId.isChecked = true;
-                fields.userId.input.readOnly = true; 
-                fields.userId.btn.disabled = true;
-            }
-            validateForm();
+        
         });
-
-        fields.userEmail.btn.addEventListener('click', async () => {
-            const value = fields.userEmail.input.value;
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            
-            const result = await checklogic ('userEmail', value);
-            if (!emailRegex.test(value)) {
-                 setValidationStatus(fields.userEmail, false, '유효한 이메일 형식이 아닙니다.');
-                 fields.userEmail.isChecked = false;
-            } else if (!result) { // Mock duplicate check
-                 setValidationStatus(fields.userEmail, false, '이미 사용 중인 이메일입니다.');
-                 fields.userEmail.isChecked = false;
-            } else {
-                 setValidationStatus(fields.userEmail, true, '사용 가능한 이메일입니다.');
-                 fields.userEmail.isChecked = true;
-                 fields.userEmail.input.readOnly = true;
-                 fields.userEmail.btn.disabled = true;
-            }
-            validateForm();
-        });
-        
-        // --- 확인 후 수정 시 상태 초기화 ---
-        fields.userId.input.addEventListener('input', () => {
-           fields.userId.isChecked = false;
-           fields.userId.input.readOnly = false;
-           fields.userId.btn.disabled = false;
-           fields.userId.input.classList.remove('is-valid', 'is-invalid');
-           fields.userId.msg.style.display = 'none';
-           validateForm();
-        });
-        
-        fields.userEmail.input.addEventListener('input', () => {
-           fields.userEmail.isChecked = false;
-           fields.userEmail.input.readOnly = false;
-           fields.userEmail.btn.disabled = false;
-           fields.userEmail.input.classList.remove('is-valid', 'is-invalid');
-           fields.userEmail.msg.style.display = 'none';
-           validateForm();
-        });
-
-        // --- 나머지 필드 유효성 검사 (keyup) ---
-        const addKeyUpValidation = (field, conditionFn, validationMessageElement) => {
-            field.input.addEventListener('keyup', () => {
-                const isValid = conditionFn();
-                field.isValid = isValid;
-                field.input.classList.toggle('is-valid', isValid);
-                field.input.classList.toggle('is-invalid', !isValid);
-                if (validationMessageElement) {
-                   validationMessageElement.style.display = isValid ? 'none' : 'block';
-                }
-                validateForm();
-            });
-        };
-
-        addKeyUpValidation(fields.password, 
-            () => /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[a-zA-Z\d!@#$%^&*()_+]{8,}$/.test(fields.password.input.value),
-            fields.password.input.nextElementSibling
-        );
-        addKeyUpValidation(fields.passwordConfirm, 
-            () => fields.password.input.value === fields.passwordConfirm.input.value && fields.passwordConfirm.input.value !== '',
-            fields.passwordConfirm.input.nextElementSibling
-        );
-        addKeyUpValidation(fields.userName, 
-            () => fields.userName.input.value.trim() !== '',
-            fields.userName.input.nextElementSibling
-        );
-        addKeyUpValidation(fields.userPhone, 
-            () => /^\d{10,11}$/.test(fields.userPhone.input.value),
-            fields.userPhone.input.nextElementSibling
-        );
-
-        
-        async function checklogic (param, value) {
-        	let url = '';
-        	
-        	if(param == 'userId'){
-        		url = '/user/idCheck';
-        	}else if(param == 'userEmail'){
-        		url = '/user/emailCheck';
-        	}
-        	
-        	const formData = new FormData();
-        	formData.set(param, value);
-        	
-        	const response = await fetch(url, {
-        		method: 'POST',
-        		body: formData
-        	})
-        	const result = await response.json();
-			console.log("확인 :::: " + JSON.stringify(result));
-        	if(result.resultCode != '200'){
-        		return false;
-        	}else{
-        		return true;
-        	}
-        	// result 값에 따라 결과 변화 시킴. (id, email 체크로직임.)
-        	// return으로 결과값을 분기 처리 해야 함.
-        } */
-        
-        
+       
     </script>
 </body>
 </html>

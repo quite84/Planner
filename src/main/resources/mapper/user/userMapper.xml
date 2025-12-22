@@ -73,16 +73,16 @@
 			USERPHONE
 		FROM USER_MASTER
 		WHERE 1=1
-		AND USEYN = 'Y' 
-		<if test="userId != '' and userId != null">
-		AND USERID = #{userId}
-		</if>
-		<if test="userName != '' and userName != null">
-		AND USERNAME = #{userName}
-		</if>
-		<if test="userEmail != '' and userEmail != null">
-		AND USEREMAIL = #{userEmail}
-		</if>
+			AND USEYN = 'Y' 
+			<if test="userId != '' and userId != null">
+			AND USERID = #{userId}
+			</if>
+			<if test="userName != '' and userName != null">
+			AND USERNAME = #{userName}
+			</if>
+			<if test="userEmail != '' and userEmail != null">
+			AND USEREMAIL = #{userEmail}
+			</if>
 	</select>
 	
 	<update id="updateUserPass" parameterType="com.planner.planner.user.dto.RequestUserDTO">

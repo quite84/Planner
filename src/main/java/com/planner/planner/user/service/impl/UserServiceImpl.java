@@ -34,6 +34,9 @@ public class UserServiceImpl implements UserService {
 		Boolean result = false;
 		List<ResponseUserDTO> exist = new ArrayList<>();
 		exist = mapper.selectOnebyCheck(param);
+		
+		log.info("데이터 확인 ::::: {}", exist);
+		
 		if(exist.isEmpty()) {
 			result = true;
 		}else{

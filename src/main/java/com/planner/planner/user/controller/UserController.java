@@ -126,7 +126,7 @@ public class UserController {
 		Map<String, Object> result = new HashMap<>();
 		boolean exist = service.selectOnebyCheck(param); 
 		
-		if(exist) {
+		if(!exist) {
 			result.put("resultCode", "200");	
 		}else {
 			result.put("resultCode", "400");
@@ -185,20 +185,17 @@ public class UserController {
 	};
 	
 	@PostMapping("/detail")
-	public ResponseEntity<?> detailById(@ModelAttribute RequestUserDTO param, HttpSession session) {
+	public ResponseEntity<?> detailById(@RequestBody RequestUserDTO param, HttpSession session) {
 		log.info("detail 진입 데이터 확인 :::: {}", param);
-		
-		ResponseUserDTO result = new ResponseUserDTO(); 
-		
-		
-		
-		return ResponseEntity.ok(result);
+		ResponseUserDTO resultUser = new ResponseUserDTO(); 
+		resultUser = service.selectOnebyUser(param);
+		log.info("detail 결과 데이터 확인 :::: {}", resultUser);
+		return ResponseEntity.ok(resultUser);
 	};
 	
 	@PostMapping("/update")
-	public ResponseEntity<?> updateById(@ModelAttribute RequestUserDTO param, HttpSession session) {
+	public ResponseEntity<?> updateById(@RequestBody RequestUserDTO param, HttpSession session) {
 		log.info("update 진입 데이터 확인 :::: {}", param);
-		
 		ResponseUserDTO result = new ResponseUserDTO(); 
 		
 		

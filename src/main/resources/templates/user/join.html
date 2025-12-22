@@ -91,7 +91,7 @@
                 alert("가입 실패: " + (result.message || "다시 시도 바랍니다."));
             }
         } catch (error) {
-            console.error('Login error:', error);
+            console.error('user Join error:', error);
             alert('회원 가입 중 오류가 발생했습니다.');
         }
     });
@@ -235,7 +235,6 @@
         		body: formData
         	})
         	const result = await response.json();
-			console.log("확인 :::: " + JSON.stringify(result));
         	if(result.resultCode != '200'){
         		return false;
         	}else{
