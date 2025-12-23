@@ -12,125 +12,373 @@
 		<div class="form-header">
 			<h2>회원 정보 수정</h2>
 		</div>
-		<!-- <form id="joinForm" th:action="@{/user/join}" method="post" onsubmit="return finalValidation()"> -->
-		<form id="updateForm">
-			<div class="form-group">
-				<label for="userId">아이디</label>
-				<div class="input-group">
-					<input type="text" class="form-control" id="userId" name="userId"
-						th:value="${userId}" disabled>
+				<form id="updateForm">
+					<div class="form-group">
+						<label for="userId">아이디</label>
+						<div class="input-group">
+							<input type="text" class="form-control" id="userId" name="userId"
+								th:value="${userId}" disabled>
+						</div>
+					</div>
+		
+					<!-- 비밀번호 변경 모달 트리거 버튼 -->
+					<button type="button" class="btn btn-secondary w-100 mb-3"
+						data-bs-toggle="modal" data-bs-target="#passwordChangeModal">
+						비밀번호 변경</button>
+		
+					<hr class="my-4">
+					<div class="form-group">
+						<label for="userName">이름</label> <input type="text"
+							class="form-control" id="userName" name="userName"
+							placeholder="이름을 입력하세요" required>
+						<div class="validation-message text-danger">이름을 입력해주세요.</div>
+					</div>
+					<div class="form-group">
+						<label for="userEmail">이메일</label>
+						<div class="input-group">
+							<input type="email" class="form-control" id="userEmail"
+								name="userEmail" placeholder="예: user@example.com" required>
+							<button class="btn btn-secondary" type="button"
+								id="emailCheckButton">중복 확인</button>
+						</div>
+						<div id="emailValidationMessage" class="validation-message"></div>
+					</div>
+					<div class="form-group">
+						<label for="userPhone">연락처</label> <input type="tel"
+							class="form-control" id="userPhone" name="userPhone"
+							placeholder="'-' 없이 숫자만 입력" required>
+						<div class="validation-message text-danger">유효한 연락처를 입력해주세요.</div>
+					</div>
+					<button type="submit" class="btn btn-primary mt-3"
+						id="updateSubmitButton">수정하기</button>
+				</form>
+			</div>
+		
+			<!-- 비밀번호 변경 모달 -->
+			<div class="modal fade" id="passwordChangeModal" tabindex="-1"
+				aria-labelledby="passwordChangeModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="passwordChangeModalLabel">비밀번호 변경</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								<label for="currentPassword">현재 비밀번호</label> <input
+									type="password" class="form-control" id="currentPassword"
+									name="currentPassword" placeholder="현재 비밀번호를 입력하세요">
+								<div class="validation-message text-danger">현재 비밀번호를
+									입력해주세요.</div>
+							</div>
+							<div class="form-group">
+								<label for="newPassword">새 비밀번호</label> <input type="password"
+									class="form-control" id="newPassword" name="newPassword"
+									placeholder="새 비밀번호를 입력하세요">
+								<div class="validation-message text-danger">새 비밀번호는 8~16자,
+									영문, 숫자, 특수문자를 포함해야 합니다.</div>
+							</div>
+							<div class="form-group">
+								<label for="newPasswordConfirm">새 비밀번호 확인</label> <input
+									type="password" class="form-control" id="newPasswordConfirm"
+									name="newPasswordConfirm" placeholder="새 비밀번호를 다시 입력하세요">
+								<div class="validation-message text-danger">새 비밀번호가 일치하지
+									않습니다.</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-bs-dismiss="modal">닫기</button>
+							<button type="button" class="btn btn-primary"
+								id="confirmPasswordChangeButton">변경</button>
+						</div>
+					</div>
 				</div>
-				<div id="idValidationMessage" class="validation-message"></div>
 			</div>
-			<!-- <div class="form-group">
-                <label for="password">비밀번호</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="영문, 숫자, 특수문자 포함 8자 이상" required>
-                <div class="validation-message text-danger">영문, 숫자, 특수문자를 포함하여 8자 이상이어야 합니다.</div>
-            </div>
-            <div class="form-group">
-                <label for="passwordConfirm">비밀번호 확인</label>
-                <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="비밀번호를 다시 입력하세요" required>
-                <div class="validation-message text-danger">비밀번호가 일치하지 않습니다.</div>
-            </div> -->
-			<hr class="my-4">
-			<div class="form-group">
-				<label for="userName">이름</label> <input type="text"
-					class="form-control" id="userName" name="userName"
-					placeholder="이름을 입력하세요" required>
-				<div class="validation-message text-danger">이름을 입력해주세요.</div>
-			</div>
-			<div class="form-group">
-				<label for="userEmail">이메일</label>
-				<div class="input-group">
-					<input type="email" class="form-control" id="userEmail"
-						name="userEmail" placeholder="예: user@example.com" required>
-					<button class="btn btn-secondary" type="button"
-						id="emailCheckButton">중복 확인</button>
-				</div>
-				<div id="emailValidationMessage" class="validation-message"></div>
-			</div>
-			<div class="form-group">
-				<label for="userPhone">연락처</label> <input type="tel"
-					class="form-control" id="userPhone" name="userPhone"
-					placeholder="'-' 없이 숫자만 입력" required>
-				<div class="validation-message text-danger">유효한 연락처를 입력해주세요.</div>
-			</div>
-			<button type="submit" class="btn btn-primary mt-3"
-				id="updateSubmitButton" disabled>수정하기</button>
-		</form>
-	</div>
-
-	<script>
-    const userId = "[[${userId}]]";
-    
-    if(userId == '' || userId == null){
-		alert("알수 없는 오류가 발생 하였습니다. 다시 로그인 바랍니다.")
-		window.location.href='/user/loginPage';
-	}else{
-		selectUserByUserId(userId);
-	}
-	
-	async function selectUserByUserId(userId){
-		const userData = {
-			userId: userId
-		}
-		try{
-			const response = await fetch('/user/detail', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(userData)
-            });
+		
+			<script
+				src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+			<script>
 			
-			if (!response.ok) {
-                throw new Error('고객정보 조회중 오류가 발생 하였습니다.');
-            }
-			const result = await response.json(); // 실제 응답 데이터 추출
+			async function sha256encoder(pass) {
+		    	const encoder = new TextEncoder();
+                const data = encoder.encode(pass);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');	
+		    	return hashHex;
+		    };
 			
-			if(result){
-				document.getElementById("userName").value = result.userName;
-				document.getElementById("userEmail").value = result.userEmail;
-				document.getElementById("userPhone").value = result.userPhone;
-			}
-			
-		}catch (error) {
-            console.error('Login error:', error);
-        }
-	}
-    
-    document.getElementById('updateForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-   		formData.set("userId", userId);
-        console.log("진입 데이터 확인 ::::: " + JSON.stringify(Object.fromEntries(formData)))
-        
-        try{
-        	
-        	const response = await fetch('/user/update', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(Object.fromEntries(formData))
-            });
-            
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const result = await response.json();
-            
-            console.log("결과 데이터 확인 ::::: " + JSON.stringify(result));
-        	
-        } catch (error) {
-            console.error('userUpdate error:', error);
-            alert('회원 수정 중 오류가 발생했습니다.');
-        }
-        
-        
-        });
-       
-    </script>
-</body>
-</html>
+		    const userId = "[[${userId}]]";
+		    
+		    // 유효성 검사 메시지를 보여주는 함수
+		    function showValidationMessage(element, message, isValid) {
+		        const formGroup = element.closest('.form-group');
+		        const validationMessageDiv = formGroup.querySelector('.validation-message');
+		        if (validationMessageDiv) {
+		            validationMessageDiv.textContent = message;
+		            if (isValid) {
+		                validationMessageDiv.classList.remove('text-danger');
+		                validationMessageDiv.classList.add('text-success');
+		                element.classList.remove('is-invalid');
+		                element.classList.add('is-valid');
+		            } else {
+		                validationMessageDiv.classList.remove('text-success');
+		                validationMessageDiv.classList.add('text-danger');
+		                element.classList.remove('is-valid');
+		                element.classList.add('is-invalid');
+		            }
+		            validationMessageDiv.style.display = 'block'; // 메시지를 항상 보이게 함
+		        }
+		    }
+		
+		    // 유효성 검사 메시지를 숨기는 함수
+		    function hideValidationMessage(element) {
+		        const formGroup = element.closest('.form-group');
+		        const validationMessageDiv = formGroup.querySelector('.validation-message');
+		        if (validationMessageDiv) {
+		            validationMessageDiv.style.display = 'none';
+		            element.classList.remove('is-valid', 'is-invalid');
+		        }
+		    }
+		
+		    // 초기 로드 시 사용자 정보 불러오기
+		    if (userId == '' || userId == null) {
+		        alert("알 수 없는 오류가 발생 하였습니다. 다시 로그인 바랍니다.");
+		        window.location.href = '/user/loginPage';
+		    } else {
+		        selectUserByUserId(userId);
+		    }
+		
+		    async function selectUserByUserId(userId) {
+		        const userData = {
+		            userId: userId
+		        };
+		        try {
+		            const response = await fetch('/user/detail', {
+		                method: 'POST',
+		                headers: {
+		                    'Content-Type': 'application/json'
+		                },
+		                body: JSON.stringify(userData)
+		            });
+		
+		            if (!response.ok) {
+		                throw new Error('고객정보 조회중 오류가 발생 하였습니다.');
+		            }
+		            const result = await response.json();
+		
+		            if (result) {
+		                document.getElementById("userName").value = result.userName;
+		                document.getElementById("userEmail").value = result.userEmail;
+		                document.getElementById("userPhone").value = result.userPhone;
+		            }
+		
+		        } catch (error) {
+		            console.error('User detail fetch error:', error);
+		            alert('회원 정보를 불러오는 중 오류가 발생했습니다.');
+		        }
+		    }
+		
+		    // 비밀번호 유효성 검사
+		    function validatePassword(password) {
+		        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[a-zA-Z\d!@#$%^&*()_+]{8,16}$/;
+		        return passwordRegex.test(password);
+		    }
+		
+		    // 이메일 유효성 검사
+		    function validateEmail(email) {
+		        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		        return emailRegex.test(email);
+		    }
+		
+		    // 연락처 유효성 검사
+		    function validatePhone(phone) {
+		        const phoneRegex = /^\d{10,11}$/; // 10 또는 11자리 숫자
+		        return phoneRegex.test(phone);
+		    }
+		
+		    // 이메일 중복 확인
+		    document.getElementById('emailCheckButton').addEventListener('click', async function() {
+		        const userEmailInput = document.getElementById('userEmail');
+		        const userEmail = userEmailInput.value;
+		        const emailValidationMessage = document.getElementById('emailValidationMessage');
+		
+		        if (!validateEmail(userEmail)) {
+		            showValidationMessage(userEmailInput, '유효한 이메일 형식을 입력해주세요.', false);
+		            return;
+		        }
+		
+		        try {
+		            const response = await fetch('/user/checkEmail', {
+		                method: 'POST',
+		                headers: {
+		                    'Content-Type': 'application/json'
+		                },
+		                body: JSON.stringify({ userEmail: userEmail })
+		            });
+		
+		            const result = await response.json();
+		            if (result.isDuplicate) {
+		                showValidationMessage(userEmailInput, '이미 등록된 이메일입니다.', false);
+		            } else {
+		                showValidationMessage(userEmailInput, '사용 가능한 이메일입니다.', true);
+		            }
+		        } catch (error) {
+		            console.error('Email check error:', error);
+		            showValidationMessage(userEmailInput, '이메일 중복 확인 중 오류가 발생했습니다.', false);
+		        }
+		    });
+		
+		    // 메인 폼 제출 이벤트 리스너 (일반 정보 수정)
+		    document.getElementById('updateForm').addEventListener('submit', async function(e) {
+		        e.preventDefault();
+				
+		        let isValidForm = true;
+		
+		        // 이름 유효성 검사
+		        const userNameInput = document.getElementById('userName');
+		        if (userNameInput.value.trim() === '') {
+		            showValidationMessage(userNameInput, '이름을 입력해주세요.', false);
+		            isValidForm = false;
+		        } else {
+		            hideValidationMessage(userNameInput);
+		        }
+		
+		        // 이메일 유효성 검사
+		        const userEmailInput = document.getElementById('userEmail');
+		        if (!validateEmail(userEmailInput.value)) {
+		            showValidationMessage(userEmailInput, '유효한 이메일 형식을 입력해주세요.', false);
+		            isValidForm = false;
+		        } else {
+		            hideValidationMessage(userEmailInput);
+		        }
+		
+		        // 연락처 유효성 검사
+		        const userPhoneInput = document.getElementById('userPhone');
+		        if (!validatePhone(userPhoneInput.value)) {
+		            showValidationMessage(userPhoneInput, "'-' 없이 10~11자리 숫자만 입력해주세요.", false);
+		            isValidForm = false;
+		        } else {
+		            hideValidationMessage(userPhoneInput);
+		        }
+		
+		        if (!isValidForm) {
+		            alert('입력된 정보를 다시 확인해주세요.');
+		            return;
+		        }
+		        
+		        const formData = {
+		            userId: userId,
+		            userName: userNameInput.value,
+		            userEmail: userEmailInput.value,
+		            userPhone: userPhoneInput.value,
+		        };
+		
+		        try {
+		            const response = await fetch('/user/update', {
+		                method: 'POST',
+		                headers: {
+		                    'Content-Type': 'application/json'
+		                },
+		                body: JSON.stringify(formData)
+		            });
+		
+		            if (!response.ok) {
+		                const errorData = await response.json().catch(() => ({}));
+		                throw new Error(errorData.message || '회원 정보 수정 중 오류가 발생했습니다.');
+		            }
+		
+		            const result = await response.json();
+		            
+		            if(result.success){
+		                alert('회원 정보가 성공적으로 수정되었습니다.');
+		                window.location.reload(); 
+		            } else {
+		                alert(result.message || '회원 정보 수정에 실패했습니다.');
+		            }
+		
+		        } catch (error) {
+		            console.error('userUpdate error:', error);
+		            alert(error.message || '회원 정보 수정 중 오류가 발생했습니다.');
+		        }
+		    });
+		
+		    // 모달 내 비밀번호 변경 버튼 이벤트 리스너
+		    document.getElementById('confirmPasswordChangeButton').addEventListener('click', async function() {
+		        let isValidPasswordForm = true;
+		        const currentPasswordInput = document.getElementById('currentPassword');
+		        const newPasswordInput = document.getElementById('newPassword');
+		        const newPasswordConfirmInput = document.getElementById('newPasswordConfirm');
+		        
+		        if (currentPasswordInput.value.trim() === '') {
+		            showValidationMessage(currentPasswordInput, '현재 비밀번호를 입력해주세요.', false);
+		            isValidPasswordForm = false;
+		        } else {
+		            hideValidationMessage(currentPasswordInput);
+		        }
+		        if (!validatePassword(newPasswordInput.value)) {
+		            showValidationMessage(newPasswordInput, '새 비밀번호는 8~16자, 영문, 숫자, 특수문자를 포함해야 합니다.', false);
+		            isValidPasswordForm = false;
+		        } else {
+		            hideValidationMessage(newPasswordInput);
+		        }
+		        if (newPasswordInput.value !== newPasswordConfirmInput.value) {
+		            showValidationMessage(newPasswordConfirmInput, '새 비밀번호가 일치하지 않습니다.', false);
+		            isValidPasswordForm = false;
+		        } else {
+		            hideValidationMessage(newPasswordConfirmInput);
+		        }
+		
+		        if (!isValidPasswordForm) {
+		            return;
+		        }
+		        
+		        const currentPass = await sha256encoder(currentPasswordInput.value);
+		        const newPass = await sha256encoder(newPasswordInput.value);
+		        
+		        const formData = {
+		            userId: userId,
+		            currentPassword: currentPass,
+		            newPassword: newPass
+		        };
+		        
+		        try {
+		            const response = await fetch('/user/updatePassword', { // 비밀번호 변경 전용 엔드포인트 사용
+		                method: 'POST',
+		                headers: {
+		                    'Content-Type': 'application/json'
+		                },
+		                body: JSON.stringify(formData)
+		            });
+		
+		            if (!response.ok) {
+		                const errorData = await response.json().catch(() => ({}));
+		                throw new Error(errorData.message || '비밀번호 변경 중 오류가 발생했습니다.');
+		            }
+		
+		            const result = await response.json();
+		            
+		            if(result.resultCode == '200'){
+		                alert('비밀번호가 성공적으로 변경되었습니다.');
+		                const modal = bootstrap.Modal.getInstance(document.getElementById('passwordChangeModal'));
+		                modal.hide();
+		                // 필드 초기화
+		                currentPasswordInput.value = '';
+		                newPasswordInput.value = '';
+		                newPasswordConfirmInput.value = '';
+		            } else {
+		                alert(result.message || '비밀번호 변경에 실패했습니다.');
+		            }
+		
+		        } catch (error) {
+		            console.error('Password change error:', error);
+		            alert(error.message || '비밀번호 변경 중 오류가 발생했습니다.');
+		        }
+		    });
+		    
+		    
+			</script>
+		</body>
+		</html>

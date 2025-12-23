@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
 		return result;
 	};
 	
-	public int upDateUserData (RequestUserDTO param) {
+	public int userPassSetting (RequestUserDTO param) {
 		int result = 0;
 		String originalString = "a123456789!";
 		MessageDigest digest;
@@ -85,6 +85,29 @@ public class UserServiceImpl implements UserService {
 	        
 		return result;
 	};
+	
+	public int updateUserPass (RequestUserDTO param) {
+		int result = 0;
+		try {
+			param.setPassword(param.getNewPassword());
+			mapper.updateUserPass(param);
+			result=200;
+		}catch(Exception e) {
+			log.info("Exception error :::: {}", e.getMessage());
+		}
+		return result;
+	};
+	
+	public int updateUserData (RequestUserDTO param) {
+		int result = 0;
+		try {
+			mapper.updateUserData(param);
+			result = 200;
+		}catch (Exception e) {
+			log.info("Exception error :::: {}", e.getMessage());
+		}
+		return result;
+	}
 	
 	public static String toHexString(byte[] hash) {
         StringBuilder hexString = new StringBuilder();

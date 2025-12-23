@@ -90,5 +90,22 @@
 		SET	PASSWORD = #{password}
 		WHERE USERID = #{userId}
 	</update>
+	
+	<update id="updateUserData" parameterType="com.planner.planner.user.dto.RequestUserDTO">
+		UPDATE USER_MASTER
+		SET
+			<if test="userName != null">
+			userName = #{userName},
+			</if>
+			<if test="userPhone != null">
+			userPhone = #{userPhone},
+			</if>
+			<if test="userEmail != null">
+			userEmail = #{userEmail}
+			</if>
+		WHERE
+			userId = #{userId}
+	</update>
+	
 
 </mapper>

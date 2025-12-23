@@ -15,5 +15,10 @@ public interface UserService {
 	
 	int joinUser(RequestUserDTO param);
 	
-	int upDateUserData (RequestUserDTO param);
+	int userPassSetting (RequestUserDTO param);
+	
+	int updateUserPass (RequestUserDTO param);
+	
+	int updateUserData (RequestUserDTO param);
+	
 }

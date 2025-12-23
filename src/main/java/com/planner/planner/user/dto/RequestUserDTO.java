@@ -21,4 +21,10 @@ public class RequestUserDTO {
 	private String role;
 	@JsonProperty
 	private String useYn;
+	
+	@JsonProperty
+	private String currentPassword;
+	@JsonProperty
+	private String newPassword;
+	
 }

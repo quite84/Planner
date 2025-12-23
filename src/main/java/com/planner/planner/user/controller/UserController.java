@@ -173,7 +173,7 @@ public class UserController {
 		Map<String, Object> result = new HashMap<>();
 		
 		if(service.selectOnebyUser(param) != null) {
-			service.upDateUserData(param);
+			service.userPassSetting(param);
 			result.put("resultCode", "200");
 			result.put("message", "임시 비밀번호를 발급 했습니다.");
 		}else {
@@ -196,10 +196,39 @@ public class UserController {
 	@PostMapping("/update")
 	public ResponseEntity<?> updateById(@RequestBody RequestUserDTO param, HttpSession session) {
 		log.info("update 진입 데이터 확인 :::: {}", param);
-		ResponseUserDTO result = new ResponseUserDTO(); 
+		Map<Object, String> result = new HashMap<>();
+		int resultCode = 0;
+		resultCode = service.updateUserData(param);
+		if(resultCode == 200) {
+			result.put("resultCode", "200");
+			result.put("message", "고객 정보가 정상 수정 되었습니다.");	
+		}else {
+			result.put("resultCode", "400");
+			result.put("message", "고객 정보 수정 중 비정상 적인 오류가 발생하였습니다. 잠시 후 다시 시도 바랍니다.");
+		}
+		return ResponseEntity.ok(result);
+	};
+	
+	@PostMapping("/updatePassword")
+	public ResponseEntity<?> updatePasswordById(@RequestBody RequestUserDTO param, HttpSession session) {
+		log.info("updatePassword 진입 데이터 확인 :::: {}", param);
+		Map<Object, String> result = new HashMap<>();
+		int resultCode = 0;
+		boolean exist = service.selectOnebyCheck(param); 
 		
-		
-		
+		if(!exist) {
+			resultCode = service.updateUserPass(param);
+			if(resultCode == 200) {
+				result.put("resultCode", "200");
+				result.put("message", "비밀번호 변경이 완료 되었습니다.");	
+			}else {
+				result.put("resultCode", "400");
+				result.put("message", "비밀번호 변경 중 오류가 발생 하였습니다. 잠시 후 다시 시도 바랍니다.");
+			}
+		}else {
+			result.put("resultCode", "400");
+			result.put("message", "잘못된 기존의 비밀번호 입력으로 비밀번호 변경이 불가합니다.");
+		}
 		return ResponseEntity.ok(result);
 	};
 	
