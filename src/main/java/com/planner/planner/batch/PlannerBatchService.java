@@ -20,24 +20,31 @@ public class PlannerBatchService {
 	private BatchService001 bat01; // 회원 정보에 대한 비지니스 (휴면, 탈퇴처리 ... )
 
 	@Autowired
-	private BatchService002 bat02; // 투두 리스트 내역에 대한 비지니스 (투두 리스트의 날짜 확인 하여 사용여부 삭제 또는 완료 처리 ... )
+	private BatchService002 bat02; // 투두 리스트 내역에 대한 비지니스 (투두 리스트의 날짜 확인 하여 사용여부 삭제 처리 ... )
 
 //	private static final DateTimeFormatter DATE_ONLY_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	
 	
-	@Scheduled(cron = "1 * * * * *")
+	@Scheduled(cron = "0 * * * * *")
 	public void getTime() throws Exception {
 		LocalDateTime now = LocalDateTime.now();
 		log.info("현재 시간 확인 ::: {}", now.format(DATE_FORMATTER));
 	}
-
+	
+	@Scheduled(cron = "0 0 1 * * *") 
+	 public void getUserDataUpdate() throws Exception{
+		/*고객 라스트 로그인 시간으로 휴면 처리나 탈퇴 처리로 변경 로직 구현*/
+//		 LocalDateTime now = LocalDateTime.now();
+//		 log.info("현재 batch002 시작 ::: {}", now);		 
+//		 bat02.todoListUpdate();
+	 };
 	
 	 @Scheduled(cron = "0 0 1 * * *") 
 	 public void getTodoUpdate() throws Exception{
 		 LocalDateTime now = LocalDateTime.now();
 		 log.info("현재 batch002 시작 ::: {}", now);		 
 		 bat02.todoListUpdate();
-	 }
+	 };
 
 }

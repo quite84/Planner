@@ -335,13 +335,13 @@
 		            return;
 		        }
 		        
-		        const currentPass = await sha256encoder(currentPasswordInput.value);
-		        const newPass = await sha256encoder(newPasswordInput.value);
+		        // const currentPass = await sha256encoder(currentPasswordInput.value);
+		        // const newPass = await sha256encoder(newPasswordInput.value);
 		        
 		        const formData = {
 		            userId: userId,
-		            currentPassword: currentPass,
-		            newPassword: newPass
+		            currentPassword: currentPasswordInput.value,
+		            newPassword: newPasswordInput.value
 		        };
 		        
 		        try {

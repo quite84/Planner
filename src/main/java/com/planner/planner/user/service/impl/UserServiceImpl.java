@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.planner.planner.commonService.Sha256EncoderService;
 import com.planner.planner.user.dto.RequestUserDTO;
 import com.planner.planner.user.dto.ResponseUserDTO;
 import com.planner.planner.user.mapper.UserMapper;
@@ -22,6 +23,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserMapper mapper;
 	
+	@Autowired
+	Sha256EncoderService encoService;
+	
 	public List<ResponseUserDTO> getUserList(){
 		
 		List<ResponseUserDTO> List = new ArrayList<>();
@@ -33,14 +37,21 @@ public class UserServiceImpl implements UserService {
 	public Boolean selectOnebyCheck(RequestUserDTO param){
 		Boolean result = false;
 		List<ResponseUserDTO> exist = new ArrayList<>();
-		exist = mapper.selectOnebyCheck(param);
 		
-		log.info("데이터 확인 ::::: {}", exist);
-		
-		if(exist.isEmpty()) {
-			result = true;
-		}else{
-			result = false;
+		try {
+			
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			byte[] encodedhash = digest.digest(param.getPassword().getBytes());
+			
+			param.setPassword(encoService.toHexString(encodedhash));
+			exist = mapper.selectOnebyCheck(param);
+			
+			if(exist.isEmpty()) {result = true;}else{result = false;}
+			
+		} catch (NoSuchAlgorithmException e) {
+			log.info("NoSuchAlgorithmException error :::: {}", e.getMessage());
+		} catch (Exception e) {
+			log.info("Exception error :::: {}", e.getMessage());
 		}
 		
 		return result;
@@ -49,9 +60,16 @@ public class UserServiceImpl implements UserService {
 	public int joinUser(RequestUserDTO param) {
 		int result = 0;
 		try {
+			
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			byte[] encodedhash = digest.digest(param.getPassword().getBytes());
+			param.setPassword(encoService.toHexString(encodedhash));
+			
 			mapper.joinUser(param);
 			result = 200;
-		}catch(Exception e) {
+		} catch (NoSuchAlgorithmException e) {
+			log.info("NoSuchAlgorithmException error :::: {}", e.getMessage());
+		} catch(Exception e) {
 			result = 500;
 			log.info("가입중 오류 발생 ::: {}", e.getMessage());
 		}
@@ -72,9 +90,9 @@ public class UserServiceImpl implements UserService {
 		try {
 			digest = MessageDigest.getInstance("SHA-256");
 			byte[] encodedhash = digest.digest(originalString.getBytes());
-			log.info("SHA-256 해시값 : " + toHexString(encodedhash));
+//			log.info("SHA-256 해시값 : " + encoService.toHexString(encodedhash));
 			
-			param.setPassword(toHexString(encodedhash));
+			param.setPassword(encoService.toHexString(encodedhash));
 			mapper.updateUserPass(param);
 			result=200;
 		} catch (NoSuchAlgorithmException e) {
@@ -89,10 +107,18 @@ public class UserServiceImpl implements UserService {
 	public int updateUserPass (RequestUserDTO param) {
 		int result = 0;
 		try {
-			param.setPassword(param.getNewPassword());
+			MessageDigest digest;
+			digest = MessageDigest.getInstance("SHA-256");
+			byte[] encodedhash = digest.digest(param.getNewPassword().getBytes());
+			
+			param.setPassword(encoService.toHexString(encodedhash));
+			param.setUpdateUser(param.getUserId());
 			mapper.updateUserPass(param);
+			
 			result=200;
-		}catch(Exception e) {
+		}catch (NoSuchAlgorithmException e) {
+			log.info("NoSuchAlgorithmException error :::: {}", e.getMessage());
+		}catch (Exception e) {
 			log.info("Exception error :::: {}", e.getMessage());
 		}
 		return result;
@@ -107,15 +133,5 @@ public class UserServiceImpl implements UserService {
 			log.info("Exception error :::: {}", e.getMessage());
 		}
 		return result;
-	}
-	
-	public static String toHexString(byte[] hash) {
-        StringBuilder hexString = new StringBuilder();
-        for (byte b : hash) {
-            String hex = Integer.toHexString(0xff & b);
-            if (hex.length() == 1) hexString.append('0');
-            hexString.append(hex);
-        }
-        return hexString.toString();
-    }
+	};	
 }

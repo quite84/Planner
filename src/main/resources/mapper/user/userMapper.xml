@@ -87,7 +87,10 @@
 	
 	<update id="updateUserPass" parameterType="com.planner.planner.user.dto.RequestUserDTO">
 		UPDATE USER_MASTER
-		SET	PASSWORD = #{password}
+		SET	
+			password = #{password},
+			updateUser = #{userId},
+			updateDate = now()
 		WHERE USERID = #{userId}
 	</update>
 	
@@ -101,8 +104,10 @@
 			userPhone = #{userPhone},
 			</if>
 			<if test="userEmail != null">
-			userEmail = #{userEmail}
+			userEmail = #{userEmail},
 			</if>
+			updateUser = #{userId},
+			updateDate = now()
 		WHERE
 			userId = #{userId}
 	</update>
