@@ -90,7 +90,7 @@
 		UPDATE USER_MASTER
 		SET	
 			password = #{password},
-			updateUser = #{userId},
+			updateUser = #{updateUser},
 			updateDate = now()
 		WHERE USERID = #{userId}
 	</update>

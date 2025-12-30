@@ -50,10 +50,8 @@ document.getElementById('adminLogin').addEventListener('submit', async function(
     const result = await response.json();
             
     if(result.resultCode === null) {
-        // 예시: 실패 시 다른 페이지로 이동
         showAlert("회원 정보가 잘못 되었습니다.", "danger");
     } else {
-        // 성공 등 다른 처리
     	showAlert("회원 입니다.", "success");
     }
 });

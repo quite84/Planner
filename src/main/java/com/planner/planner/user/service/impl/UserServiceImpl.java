@@ -33,12 +33,14 @@ public class UserServiceImpl implements UserService {
 	};
 	
 	public Boolean selectOnebyCheck(RequestUserDTO param){
+		log.info("1");
 		ResponseUserDTO user = mapper.selectOnebyUser(param);
-
+		log.info("2   {}", user);
 		if (user != null && passwordEncoder.matches(param.getPassword(), user.getPassword())) {
+			log.info("3");
 			return true;
 		}
-		
+		log.info("4");
 		return false;
 	};
 	
@@ -80,6 +82,7 @@ public class UserServiceImpl implements UserService {
 	public int updateUserPass (RequestUserDTO param) {
 		int result = 0;
 		try {
+			log.info("1111");
 			param.setPassword(passwordEncoder.encode(param.getNewPassword()));
 			param.setUpdateUser(param.getUserId());
 			mapper.updateUserPass(param);

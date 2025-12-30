@@ -23,6 +23,7 @@
 </head>
 <body>
     <div class="container">
+    <th:insert th:replace="~{layout}" />
         <div class="form-header">
             <h2>아이디/비밀번호 찾기</h2>
         </div>
@@ -126,6 +127,44 @@ document.getElementById('findPwForm').addEventListener('submit', async function(
     }
 });
 
+function showAlert(message, type = 'info') {
+    const alertContainer = document.getElementById('alert-container');
+    const wrapper = document.createElement('div');
+    const alertId = 'alert-' + Date.now(); // Unique ID for each alert
+    wrapper.innerHTML = [
+        `<div id="${alertId}" class="alert alert-${type} alert-dismissible fade show" role="alert">`,
+        `   <div>${message}</div>`,
+        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+        '</div>'
+    ].join('');
+
+    alertContainer.append(wrapper);
+
+    // Automatically close the alert after 5 seconds
+    const alertElement = document.getElementById(alertId);
+    const bsAlert = new bootstrap.Alert(alertElement);
+    setTimeout(() => {
+        bsAlert.close();
+    }, 5000);
+}
+
+function showConfirm(message, callback) {
+    const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+    const confirmModalBody = document.getElementById('confirmModalBody');
+    const confirmModalConfirmButton = document.getElementById('confirmModalConfirmButton');
+
+    confirmModalBody.textContent = message;
+
+    const confirmHandler = () => {
+        callback();
+        confirmModal.hide();
+        confirmModalConfirmButton.removeEventListener('click', confirmHandler);
+    };
+
+    confirmModalConfirmButton.addEventListener('click', confirmHandler);
+
+    confirmModal.show();
+}
 </script>
 
 </html>

@@ -81,10 +81,12 @@ public class UserController {
 		log.info("login ::::: {} " , param);
 		Map<String, Object> result = new HashMap<>();
 		boolean exist = service.selectOnebyCheck(param); 
-		if(!exist) {
+		if(exist) {
+			log.info("5");
 			session.setAttribute("userId", param.getUserId());
 			result.put("resultCode", "200");	
 		}else {
+			log.info("6");
 			result.put("resultCode", "400");
 		}
 				
@@ -212,22 +214,27 @@ public class UserController {
 	@PostMapping("/updatePassword")
 	public ResponseEntity<?> updatePasswordById(@RequestBody RequestUserDTO param, HttpSession session) {
 		log.info("updatePassword 진입 데이터 확인 :::: {}", param);
+		param.setPassword(param.getCurrentPassword());
 		Map<Object, String> result = new HashMap<>();
 		int resultCode = 0;
 		boolean exist = service.selectOnebyCheck(param); 
-		
-		if(!exist) {
+		log.info("11");
+		if(exist) {
+			log.info("22");
 			resultCode = service.updateUserPass(param);
 			if(resultCode == 200) {
+				log.info("33");
 				result.put("resultCode", "200");
 				result.put("message", "비밀번호 변경이 완료 되었습니다.");	
 			}else {
+				log.info("44");
 				result.put("resultCode", "400");
 				result.put("message", "비밀번호 변경 중 오류가 발생 하였습니다. 잠시 후 다시 시도 바랍니다.");
 			}
 		}else {
+			log.info("55");
 			result.put("resultCode", "400");
-			result.put("message", "잘못된 기존의 비밀번호 입력으로 비밀번호 변경이 불가합니다.");
+			result.put("message", "잘못된 기존 비밀번호 입력으로 비밀번호 변경이 불가합니다.");
 		}
 		return ResponseEntity.ok(result);
 	};
