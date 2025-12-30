@@ -10,6 +10,7 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 </head>
 <body>
+    <div id="alert-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1050"></div>
     <!-- Common Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
       <div class="container-fluid">
@@ -31,6 +32,27 @@
                 e.preventDefault();
                 window.location.href = this.getAttribute('href');
             });
+        }
+
+        function showAlert(message, type = 'info') {
+            const alertContainer = document.getElementById('alert-container');
+            const wrapper = document.createElement('div');
+            const alertId = 'alert-' + Date.now(); // Unique ID for each alert
+            wrapper.innerHTML = [
+                `<div id="${alertId}" class="alert alert-${type} alert-dismissible fade show" role="alert">`,
+                `   <div>${message}</div>`,
+                '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                '</div>'
+            ].join('');
+
+            alertContainer.append(wrapper);
+
+            // Automatically close the alert after 5 seconds
+            const alertElement = document.getElementById(alertId);
+            const bsAlert = new bootstrap.Alert(alertElement);
+            setTimeout(() => {
+                bsAlert.close();
+            }, 5000);
         }
     </script>
 </body>

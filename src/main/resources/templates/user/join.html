@@ -85,14 +85,14 @@
 
             const result = await response.json();
             if (result.resultCode === 200) { // Assuming "1" is success
-                alert("가입 성공!");
+                showAlert("가입 성공!", "success");
                 window.location.href = "/todo"; // Redirect to main page on success
             } else {
-                alert("가입 실패: " + (result.message || "다시 시도 바랍니다."));
+                showAlert("가입 실패: " + (result.message || "다시 시도 바랍니다."), "danger");
             }
         } catch (error) {
             console.error('user Join error:', error);
-            alert('회원 가입 중 오류가 발생했습니다.');
+            showAlert('회원 가입 중 오류가 발생했습니다.', 'danger');
         }
     });
     
@@ -227,6 +227,16 @@
         		url = '/user/emailCheck';
         	}
         	
+        	if(value == null || value == ''){
+        		if(param == 'userId'){
+            		showAlert("ID를 입력 바랍니다.", "warning");
+            	}else if(param == 'userEmail'){
+            		showAlert("Email을 입력 바랍니다.", "warning");
+            	}
+        		return
+        	}
+        	
+        	
         	const formData = new FormData();
         	formData.set(param, value);
         	
@@ -240,10 +250,7 @@
         	}else{
         		return true;
         	}
-        	// result 값에 따라 결과 변화 시킴. (id, email 체크로직임.)
-        	// return으로 결과값을 분기 처리 해야 함.
         }
-        
         
     </script>
 </body>

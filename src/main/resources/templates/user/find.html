@@ -92,16 +92,16 @@ document.getElementById('findIdForm').addEventListener('submit', async function(
         const result = await response.json();
         
         if(result.resultCode === '200'){
-        	alert("고객님의 ID는 ::: " + result.message + " 입니다.");
+        	showAlert("고객님의 ID는 ::: " + result.message + " 입니다.", "success");
         	if(confirm("로그인 화면으로 이동 할까요?")){
         		window.location.href="/user/loginPage";
         	}
         }else{
-        	alert(result.message);
+        	showAlert(result.message, "danger");
         }
 	}catch (error) {
         console.error('error:', error);
-        alert('오류가 발생했습니다.');
+        showAlert('오류가 발생했습니다.', 'danger');
     }
 });
 
@@ -119,10 +119,10 @@ document.getElementById('findPwForm').addEventListener('submit', async function(
         }
 
         const result = await response.json();
-        alert(result.message);
+        showAlert(result.message, "info");
 	}catch (error) {
         console.error('error:', error);
-        alert('오류가 발생했습니다.');
+        showAlert('오류가 발생했습니다.', 'danger');
     }
 });
 

@@ -14,9 +14,6 @@
 	<div class="container mt-4">
 		<div layout:fragment="content">
 			<th:insert th:replace="~{layout}" />
-			<!-- 우측 상단 고정 Toast 컨테이너 (id 부여) -->
-			<div id="toastContainer"
-				class="toast-container position-fixed top-0 end-0 p-3"></div>
 			<div class="container">
 				<div class="d-flex justify-content-between align-items-center mb-3">
 					<h2>To-Do List</h2>
@@ -99,7 +96,7 @@
             // const userId = 'user01'; 
             const userId = "[[${userId}]]";
 			if(userId == '' || userId == null){
-				alert("알수 없는 오류가 발생 하였습니다. 다시 로그인 바랍니다.")
+				showAlert("알수 없는 오류가 발생 하였습니다. 다시 로그인 바랍니다.", "danger");
 				window.location.href='/user/loginPage';
 			}
 			
@@ -112,27 +109,6 @@
                 });
             });
 
-            // 토스트 팝업 노출을 위한 함수
-            function showSuccessToast(message) {
-                var uniqueId = 'successToast_' + Date.now();
-                var toastHTML = `
-                    <div id="${uniqueId}" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="d-flex">
-                            <div class="toast-body">
-                                ${message}
-                            </div>
-                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                        </div>
-                    </div>
-                `;
-                $('#toastContainer').append(toastHTML);
-                var toastEl = document.getElementById(uniqueId);
-                var toast = new bootstrap.Toast(toastEl);
-                toast.show();
-                $(toastEl).on('hidden.bs.toast', function () {
-                    $(this).remove();
-                });
-            }
 
             // Function to load to-dos
             async function loadTodos() {
@@ -159,7 +135,7 @@
                     
                 } catch (error) {
                     console.error(error);
-                    alert('Could not load to-dos.');
+                    showAlert('Could not load to-dos.', 'danger');
                 }
             }
 
@@ -202,7 +178,7 @@
                 const dueDate = document.getElementById('dueDate').value;
 
                 if (!title || !dueDate) {
-                    alert('Please provide a title and due date.');
+                    showAlert('Please provide a title and due date.', 'warning');
                     return;
                 }
 
@@ -225,12 +201,12 @@
                         throw new Error('Failed to add to-do');
                     }
                     
-                    showSuccessToast("새로운 할 일이 추가되었습니다!");
+                    showAlert("새로운 할 일이 추가되었습니다!", "success");
                     document.getElementById('add-todo-form').reset();
                     loadTodos(); // Reload the list
                 } catch (error) {
                     console.error(error);
-                    alert('Could not add to-do.');
+                    showAlert('Could not add to-do.', 'danger');
                 }
             }
 
@@ -254,7 +230,7 @@
                     loadTodos(); // Reload the list
                 } catch (error) {
                     console.error(error);
-                    alert('Could not update to-do status.');
+                    showAlert('Could not update to-do status.', 'danger');
                 }
             }
             
@@ -275,7 +251,7 @@
                     loadTodos(); // Reload the list
                 } catch (error) {
                     console.error(error);
-                    alert('Could not delete to-do.');
+                    showAlert('Could not delete to-do.', 'danger');
                 }
             }
             
@@ -287,10 +263,10 @@
                     });
                 	const result = await response.json();
                 	if (result.resultCode === "200") { // Assuming "1" is success
-                        alert("로그아웃 성공");
+                        showAlert("로그아웃 성공", "success");
                         window.location.href = "/user/loginPage"; // Redirect to main page on success
                     } else {
-                        alert("로그아웃 실패: " + (result.message));
+                        showAlert("로그아웃 실패: " + (result.message), "danger");
                     }	
             	}
             });
@@ -320,11 +296,11 @@
                         		 $('#myModal').modal('hide');
                                  window.location.href='/user/updatePage';	 
                         	 }else{
-                        		 alert('비밀번호 입력이 잘못 되었습니다. 다시 입력 바랍니다.');
+                        		 showAlert('비밀번호 입력이 잘못 되었습니다. 다시 입력 바랍니다.', 'danger');
                         	 }
                          },
                          error: function () {
-                             alert('알수 없는 오류가 발생 하였습니다. 잠시후 재시도 바랍니다.');
+                             showAlert('알수 없는 오류가 발생 하였습니다. 잠시후 재시도 바랍니다.', 'danger');
                          }
                      });
             	});
