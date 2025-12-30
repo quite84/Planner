@@ -1,5 +1,8 @@
 package com.planner.planner.batch;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -30,6 +33,15 @@ public class PlannerBatchService {
 	public void getTime() throws Exception {
 		LocalDateTime now = LocalDateTime.now();
 		log.info("현재 시간 확인 ::: {}", now.format(DATE_FORMATTER));
+		
+//		Runtime runtime = Runtime.getRuntime();
+        MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+		
+		 MemoryUsage heapUsage = memoryMXBean.getHeapMemoryUsage();
+	        System.out.println("Used Memory: " + heapUsage.getUsed() / 1024 / 1024 + " MB");
+	        System.out.println("Total Memory: " + heapUsage.getCommitted() / 1024 / 1024 + " MB"); // 실제 사용 가능한 총 메모리
+	        System.out.println("Max Memory: " + heapUsage.getMax() / 1024 / 1024 + " MB"); // 최대 힙 메모리
+	   
 	}
 	
 	@Scheduled(cron = "0 0 1 * * *") 

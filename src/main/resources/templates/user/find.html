@@ -93,9 +93,9 @@ document.getElementById('findIdForm').addEventListener('submit', async function(
         
         if(result.resultCode === '200'){
         	showAlert("고객님의 ID는 ::: " + result.message + " 입니다.", "success");
-        	if(confirm("로그인 화면으로 이동 할까요?")){
-        		window.location.href="/user/loginPage";
-        	}
+            showConfirm("로그인 화면으로 이동 할까요?", () => {
+                window.location.href="/user/loginPage";
+            });
         }else{
         	showAlert(result.message, "danger");
         }

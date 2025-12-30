@@ -16,6 +16,8 @@ public class ResponseUserDTO {
 	@JsonProperty
 	private String userEmail;
 	@JsonProperty
+	private String password;
+	@JsonProperty
 	private String role;
 	@JsonProperty
 	private String useYn;

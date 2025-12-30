@@ -67,10 +67,11 @@
 	
 	<select id="selectOnebyUser" parameterType="com.planner.planner.user.dto.RequestUserDTO" resultType="com.planner.planner.user.dto.ResponseUserDTO">
 		SELECT
-			USERID,
-			USERNAME,
-			USEREMAIL,
-			USERPHONE
+			userId,
+			userName,
+			userEmail,
+			userPhone,
+			password
 		FROM USER_MASTER
 		WHERE 1=1
 			AND USEYN = 'Y' 
