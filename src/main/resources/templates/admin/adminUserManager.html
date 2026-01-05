@@ -6,14 +6,19 @@
 </head>
 <body>
 
-	<div class="container mt-4">
+	<div class="container mt-4" style="width: 80rem;">
 		<div layout:fragment="content">
-			<th:insert th:replace="~{layout}" />
-			
-			
-			회원 관리 페이지 입니다.
-						
-			
+			<div class="row justify-content-center">
+        		<div class="col-md-10 col-lg-8">
+					<th:insert th:replace="~{layout}" />
+					<h2 class="mb-4">회원 관리 페이지</h2>
+					<div class="card">
+						<div class="card-body">
+							회원 관리 기능이 여기에 추가될 예정입니다.
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 

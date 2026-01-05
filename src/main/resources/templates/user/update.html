@@ -8,11 +8,13 @@
 <link rel="stylesheet" href="/css/global.css">
 </head>
 <body>
-	<div class="container">
-	<th:insert th:replace="~{layout}" />
-		<div class="form-header">
-			<h2>회원 정보 수정</h2>
-		</div>
+	<div class="container-fluid mt-4" style="width: 80rem;">
+		<div class="row justify-content-center">
+			<div class="col-md-8 col-lg-6">
+				<th:insert th:replace="~{layout}" />
+				<div class="form-header">
+					<h2>회원 정보 수정</h2>
+				</div>
 				<form id="updateForm">
 					<div class="form-group">
 						<label for="userId">아이디</label>
@@ -53,6 +55,8 @@
 						id="updateSubmitButton">수정하기</button>
 				</form>
 			</div>
+		</div>
+	</div>
 		
 			<!-- 비밀번호 변경 모달 -->
 			<div class="modal fade" id="passwordChangeModal" tabindex="-1"
