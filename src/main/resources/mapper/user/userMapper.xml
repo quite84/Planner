@@ -19,6 +19,7 @@
 		SELECT
 			USERID,
 			USERNAME,
+			PASSWORD,
 			USERPHONE,
 			USEREMAIL
 		FROM USER_MASTER
@@ -97,7 +98,7 @@
 	
 	<update id="updateUserData" parameterType="com.planner.planner.user.dto.RequestUserDTO">
 		UPDATE USER_MASTER
-		SET
+		<set>
 			<if test="userName != null">
 			userName = #{userName},
 			</if>
@@ -109,6 +110,7 @@
 			</if>
 			updateUser = #{userId},
 			updateDate = now()
+		</set>
 		WHERE
 			userId = #{userId}
 	</update>

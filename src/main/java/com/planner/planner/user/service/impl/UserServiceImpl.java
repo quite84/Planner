@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.planner.planner.user.dto.RequestUserDTO;
 import com.planner.planner.user.dto.ResponseUserDTO;
@@ -26,10 +27,10 @@ public class UserServiceImpl implements UserService {
 	
 	public List<ResponseUserDTO> getUserList(){
 		
-		List<ResponseUserDTO> List = new ArrayList<>();
-		List = mapper.userSelect();
+		List<ResponseUserDTO> userList = new ArrayList<>();
+		userList = mapper.userSelect();
 		
-		return List;
+		return userList;
 	};
 	
 	public Boolean selectOnebyCheck(RequestUserDTO param){
@@ -44,6 +45,7 @@ public class UserServiceImpl implements UserService {
 		return false;
 	};
 	
+	@Transactional
 	public int joinUser(RequestUserDTO param) {
 		int result = 0;
 		try {
@@ -65,9 +67,13 @@ public class UserServiceImpl implements UserService {
 		return result;
 	};
 	
+	@Transactional
 	public int userPassSetting (RequestUserDTO param) {
 		int result = 0;
+		
 		String originalString = "a123456789!";
+		// Generate a random password
+//		String originalString = java.util.UUID.randomUUID().toString().substring(0, 8) + "!";
 		try {
 			param.setPassword(passwordEncoder.encode(originalString));
 			mapper.updateUserPass(param);
@@ -79,6 +85,7 @@ public class UserServiceImpl implements UserService {
 		return result;
 	};
 	
+	@Transactional
 	public int updateUserPass (RequestUserDTO param) {
 		int result = 0;
 		try {
@@ -94,6 +101,7 @@ public class UserServiceImpl implements UserService {
 		return result;
 	};
 	
+	@Transactional
 	public int updateUserData (RequestUserDTO param) {
 		int result = 0;
 		try {

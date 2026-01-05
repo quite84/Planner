@@ -33,9 +33,9 @@ public class UserController {
 	@GetMapping("/main")
 	public String getUser(Model model) {
 		
-		List<ResponseUserDTO> List = new ArrayList<>();
-		List = service.getUserList();
-		model.addAttribute("List", List);
+		List<ResponseUserDTO> userList = new ArrayList<>();
+		userList = service.getUserList();
+		model.addAttribute("List", userList);
 		
 		return "user/user";
 	};
@@ -158,10 +158,11 @@ public class UserController {
 	public ResponseEntity<?> findByName(@ModelAttribute RequestUserDTO param, HttpSession session) {
 		log.info("findByName 진입 데이터 확인 :::: {}", param);
 		Map<String, Object> result = new HashMap<>();
+		ResponseUserDTO user = service.selectOnebyUser(param);
 		
-		if(service.selectOnebyUser(param) != null) {
+		if(user != null) {
 			result.put("resultCode", "200");
-			result.put("message", service.selectOnebyUser(param).getUserId());
+			result.put("message", user.getUserId());
 		}else {
 			result.put("resultCode", "400");
 			result.put("message", "잘못된 데이터 입력으로 해당 고객을 찾을 수 없습니다.");
@@ -173,8 +174,9 @@ public class UserController {
 	public ResponseEntity<?> findById(@ModelAttribute RequestUserDTO param, HttpSession session) {
 		log.info("findById 진입 데이터 확인 :::: {}", param);
 		Map<String, Object> result = new HashMap<>();
-		
-		if(service.selectOnebyUser(param) != null) {
+		ResponseUserDTO user = service.selectOnebyUser(param);
+
+		if(user != null) {
 			service.userPassSetting(param);
 			result.put("resultCode", "200");
 			result.put("message", "임시 비밀번호를 발급 했습니다.");
