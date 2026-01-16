@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<title>To-Do List</title>
+</head>
+<body>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+	<div th:replace="~{css/Bootstrap :: bootstrap}" />
+
+	<div class="container-fluid mt-4" style="width: 80rem;">
+		<div layout:fragment="content">
+			<th:insert th:replace="~{layout}" />
+			<div class="row justify-content-center">
+				<div class="col-md-10 col-lg-8">
+					<div class="d-flex justify-content-between align-items-center mb-3">
+						<h2>To-Do List</h2>
+						<form id="userlogOut">
+							<button type="submit" class="btn btn-danger">로그아웃</button>
+						</form>
+					</div>
+					<!-- Add To-Do Form -->
+					<div class="card mb-4">
+						<div class="card-body">
+							<h5 class="card-title">Add New To-Do</h5>
+							<form id="add-todo-form">
+								<div class="mb-3">
+									<label for="title" class="form-label">Title</label> <input
+										type="text" class="form-control" id="title" required>
+								</div>
+								<div class="mb-3">
+									<label for="dueDate" class="form-label">Due Date</label> <input
+										type="date" class="form-control" id="dueDate" required>
+								</div>
+								<button type="submit" class="btn btn-primary">Add</button>
+							</form>
+						</div>
+					</div>
+
+					<!-- To-Do List -->
+					<div class="d-flex justify-content-between align-items-center mb-3">
+						<h5>[[${userId}]] 님의 할일 내역입니다.</h5>
+						<!-- <a href="/user/updatePage" class="btn btn-secondary">회원 정보 수정</a> -->
+
+						<!-- 이번 모달 팝업의 데이터 전송을 jquery와 ajax 통신방식으로 코드 작성 -->
+						<button type="button" class="btn btn-secondary" data-toggle="modal"
+							data-target="#myModal">회원 정보 수정</button>
+						<!-- 모달 내용 start -->
+						<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+							aria-labelledby="myModalLabel" aria-hidden="true"
+							data-backdrop="static">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="myModalLabel">비밀번호 입력</h5>
+										<button type="button" class="close" data-dismiss="modal"
+											aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<form id="modalForm">
+										<div class="modal-body">
+											<label for="modalInput">비밀번호 입력:</label>
+											<input type="password"
+												id="modalInput" class="form-control" name="inputValue"
+												required>
+										</div>
+										<div class="modal-footer d-flex justify-content-end">
+											<button type="submit" class="btn btn-primary"
+												style="width: 4rem;">확인</button>
+											<button type="button" class="btn btn-secondary"
+												data-dismiss="modal" style="width: 4rem;">닫기</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+						<!-- 모달 내용 end -->
+					</div>
+					
+					
+					<ul class="list-group" id="todo-list">
+						<!-- To-Do items will be inserted here by JavaScript -->
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+    $(document).ready(function() {
+        const userId = "[[${userId}]]";
+        if (!userId) {
+            showAlert("알수 없는 오류가 발생 하였습니다. 다시 로그인 바랍니다.", "danger");
+            window.location.href = '/user/loginPage';
+        }
+
+        loadTodos();
+
+        $('#add-todo-form').on('submit', function(event) {
+            event.preventDefault();
+            addTodo();
+        });
+
+        $('#userlogOut').on('submit', async function(e) {
+            e.preventDefault();
+            showConfirm("로그아웃 하시겠습니까?", async () => {
+                const response = await fetch('/user/logOut', {
+                    method: 'POST'
+                });
+                const result = await response.json();
+                if (result.resultCode === "200") {
+                    showAlert("로그아웃 성공", "success");
+                    window.location.href = "/user/loginPage";
+                } else {
+                    showAlert("로그아웃 실패: " + (result.message), "danger");
+                }
+            });
+        });
+
+        $("#modalForm").on("submit", async function(e) {
+            e.preventDefault();
+            const pass = $("#modalInput").val();
+
+            var userData = {
+                userId: '[[${userId}]]',
+                password: pass
+            };
+            $.ajax({
+                url: '/user/passwordCheck',
+                type: 'POST',
+                data: JSON.stringify(userData),
+                contentType: 'application/json',
+                success: function(response) {
+                    if (response.resultCode === '200') {
+                        $('#myModal').modal('hide');
+                        window.location.href = '/user/updatePage';
+                    } else {
+                        showAlert('비밀번호 입력이 잘못 되었습니다. 다시 입력 바랍니다.', 'danger');
+                    }
+                },
+                error: function() {
+                    showAlert('알수 없는 오류가 발생 하였습니다. 잠시후 재시도 바랍니다.', 'danger');
+                }
+            });
+        });
+
+        async function loadTodos() {
+            try {
+                const response = await fetch(`/api/todos/user/${userId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch to-dos');
+                }
+                const todos = await response.json();
+                const todoList = $('#todo-list');
+                todoList.empty();
+
+                if (todos.length === 0) {
+                    const emptyMessage = $('<li></li>').text('아직 할일 내역이 없습니다.').css('color', 'green');
+                    todoList.append(emptyMessage);
+                } else {
+                    todos.forEach(todo => {
+                        todoList.append(createTodoElement(todo));
+                    });
+                }
+
+            } catch (error) {
+                console.error(error);
+                showAlert('Could not load to-dos.', 'danger');
+            }
+        }
+
+        function createTodoElement(todo) {
+            const li = $('<li></li>').addClass('list-group-item d-flex justify-content-between align-items-center').attr('id', `todo-${todo.todoid}`);
+            const titleSpan = $('<span></span>').text(todo.title + (todo.dueDate ? ` (Due: ${new Date(todo.dueDate).toLocaleDateString()})` : ''));
+            if (todo.completed === 'Y') {
+                titleSpan.css('text-decoration', 'line-through');
+            }
+
+            const buttonsDiv = $('<div></div>');
+            const completeButton = $('<button></button>').addClass(`btn ${todo.completed === 'Y' ? 'btn-secondary' : 'btn-success'} btn-sm me-2`).text(todo.completed === 'Y' ? 'Undo' : 'Complete').on('click', () => toggleComplete(todo));
+            const deleteButton = $('<button></button>').addClass('btn btn-danger btn-sm').text('Delete').on('click', () => deleteTodo(todo.todoid));
+
+            buttonsDiv.append(completeButton, deleteButton);
+            li.append(titleSpan, buttonsDiv);
+
+            return li;
+        }
+
+        async function addTodo() {
+            const title = $('#title').val();
+            const dueDate = $('#dueDate').val();
+
+            if (!title || !dueDate) {
+                showAlert('Please provide a title and due date.', 'warning');
+                return;
+            }
+
+            const newTodo = {
+                userId: userId,
+                title: title,
+                dueDate: new Date(dueDate).toISOString(),
+                completed: 'N',
+                insertUser: userId
+            };
+
+            try {
+                const response = await fetch('/api/todos', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newTodo)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to add to-do');
+                }
+
+                showAlert("새로운 할 일이 추가되었습니다!", "success");
+                $('#add-todo-form')[0].reset();
+                loadTodos();
+            } catch (error) {
+                console.error(error);
+                showAlert('Could not add to-do.', 'danger');
+            }
+        }
+
+        async function toggleComplete(todo) {
+            const updatedTodo = {
+                completed: todo.completed === 'Y' ? 'N' : 'Y',
+                updateUser: userId
+            };
+
+            try {
+                const response = await fetch(`/api/todos/${todo.todoid}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedTodo)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to update to-do');
+                }
+                loadTodos();
+            } catch (error) {
+                console.error(error);
+                showAlert('Could not update to-do status.', 'danger');
+            }
+        }
+
+        async function deleteTodo(todoId) {
+            showConfirm('해당 내역을 삭제 할까요?', async () => {
+                try {
+                    const response = await fetch(`/api/todos/${todoId}`, {
+                        method: 'DELETE'
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to delete to-do');
+                    }
+                    loadTodos();
+                } catch (error) {
+                    console.error(error);
+                    showAlert('Could not delete to-do.', 'danger');
+                }
+            });
+        }
+    });
+</script>
+</html>

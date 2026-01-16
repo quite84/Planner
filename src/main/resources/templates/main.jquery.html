@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<body>
+
+	<th:block layout:fragment="css">
+		<!-- 필요시 추가 css 가능 -->
+	</th:block>
+	<div class="container-fluid mt-5" style="width: 80rem;">
+		<div layout:fragment="content">
+
+			<!-- layout.html 적용 코드 타 html에서 insert 할때 참고 -->
+			<th:insert th:replace="~{layout}" />
+			<!-- 우측 상단 고정 Toast 컨테이너 (id 부여) -->
+			<div id="toastContainer"
+				class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+			<div class="row justify-content-center">
+				<div class="col-md-8">
+					<div class="card shadow-sm p-4">
+						<h1 class="mb-4 text-center">Bootstrap 예제 버튼</h1>
+						<div class="text-center mb-3">
+							<button type="button" id="a1" class="btn btn-primary" style="width: 28rem;">Primary Button</button><br>
+							<button type="button" class="btn btn-success" id="showToastBtn" style="width: 13rem;">Success Button</button>
+							<button type="button" id="b1" class="btn btn-danger" style="width: 13rem;">Danger Button</button>
+						</div>
+						<hr>
+						<p>아래는 Bootstrap의 카드 컴포넌트 예시입니다.</p>
+			
+						<!-- controller에서 타임립프로 데이터 노출을 위한 방법 -->
+						<p th:text="${message}" />
+						<p th:text="${user}" />
+			
+						<div class="card mt-3">
+							<div class="card-body">
+								<h5 class="card-title">카드 제목</h5>
+								<p class="card-text">이 텍스트가 Bootstrap 카드 컴포넌트에 의해 꾸며집니다.</p>
+								<a href="/user/loginPage" class="btn btn-secondary">유저 로그인</a>
+								<a href="/admin/loginPage" class="btn btn-secondary">관리자 로그인</a>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+
+			<!-- 모달 트리거 버튼 -->
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">모달 열기</button>
+
+			<!-- 모달 내용 start -->
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+				aria-labelledby="myModalLabel" aria-hidden="true"
+				data-backdrop="static">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="myModalLabel">모달 제목</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							모달 내용입니다.
+							<p id="realtime" th:text="${today}" />
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"	data-dismiss="modal">닫기</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 모달 내용 end -->
+			
+			
+		</div>
+	</div>
+
+</body>
+<script>
+	$(document).ready(function() {
+		
+		$("#a1").click(function() {
+			showAlert("Primary Button이 클릭되었습니다!", "info");
+			window.location.href = "/user/main";
+		});
+		
+		$("#b1").click(function(){
+			window.location.href = "/todo";
+		});
+		
+		$('#showToastBtn').on('click', function() {
+		    showAlert("Bootstrap이 성공적으로 적용되었습니다!", "success");
+		});
+
+        // 1. 서버시간을 JS Date 객체로 변환
+        let now = new Date($('#realtime').text().replace('T', ' '));
+
+        // 2. 1초마다 시간 갱신
+        setInterval(function() {
+            now.setSeconds(now.getSeconds() + 1);
+            $('#realtime').text(now.toLocaleString());
+        }, 1000);
+	});
+</script>
+</html>
